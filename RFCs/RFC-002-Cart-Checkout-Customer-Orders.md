@@ -164,3 +164,45 @@ Seluruh aturan mutasi status pesanan dan pembayaran dipusatkan pada model `App\M
 8. **AC-8 (Aturan Pembatalan Pesanan oleh Pelanggan)**: Pengiriman `POST /orders/{order}/cancel` oleh pemilik pesanan mengubah `status` menjadi `'cancelled'` hanya ketika `status === 'pending'` **DAN** `payment_status === 'unpaid'`; permintaan pembatalan oleh pelanggan ditolak apabila pesanan sudah berstatus `payment_status === 'paid'` atau `status` sudah berada pada `'preparing'`, `'ready'`, `'completed'`, atau `'cancelled'`.
 9. **AC-9 (Isolasi Pesanan Antar-Pelanggan via `OrderPolicy`)**: Pelanggan yang mencoba mengakses `GET /orders/{order}`, `POST /orders/{order}/pay`, atau `POST /orders/{order}/cancel` milik pelanggan lain menerima respons `403 Forbidden`, dan halaman `GET /orders` hanya menampilkan daftar pesanan milik pelanggan yang sedang login.
 10. **AC-10 (Middleware `EnsureUserIsAdmin` pada Rute `/admin`)**: Pengguna ber-role `customer` yang mengakses `GET /admin` (atau rute ber-middleware `admin`) menerima respons `403 Forbidden`, pengunjung yang belum login diarahkan ke halaman `/login`, dan pengguna ber-role `admin` diizinkan mengaksesnya.
+
+---
+
+## Implementation Notes
+
+### Plan Approval & Deviations
+- **Rencana Implementasi**: Disetujui oleh pengguna pada Phase 1 sebelum penulisan kode dimulai.
+- **Penyimpangan (Deviations)**: Tidak ada penyimpangan dari spesifikasi `RFC-002`.
+- **Keputusan Implementasi (Sesuai Section 4 Implementer's Choices)**:
+  - `POST /cart/items` mengarahkan kembali (`redirect()->back()`) disertai pesan status flash agar pengguna dapat menambahkan beberapa menu dari `/menus` dengan cepat; `PATCH /cart/items/{menuId}` dan `DELETE /cart/items/{menuId}` mengarahkan ke `route('cart.index')`.
+  - `POST /checkout`, `POST /orders/{order}/pay`, dan `POST /orders/{order}/cancel` mengarahkan ke `route('orders.show', $order)`.
+  - Visual QRIS dummy pada `resources/views/orders/show.blade.php` menggunakan ilustrasi SVG bergaya Playful Pop-Editorial yang memuat label **"SIMULASI"** secara jelas beserta tombol **"Saya sudah bayar"**.
+  - Pada `resources/views/menus/index.blade.php`, elemen `<form method="POST" action="{{ route('cart.store') }}">` hanya dirender untuk menu dengan `$menu->is_available === true` (menu dengan `is_available = false` menampilkan tombol nonaktif tanpa form `/cart/items`) sehingga menjaga kompatibilitas dengan `AC-6` pada `RFC-001`.
+- **Fix Round (`REVIEW-RFC-002.md`)**:
+  - Menambahkan badge `"Tidak Tersedia"` pada daftar ringkasan item di `resources/views/checkout/index.blade.php` ketika `!$item['is_available']` (selaras dengan `resources/views/cart/index.blade.php`) beserta pengujian pada `CheckoutTest::test_ac5_checkout_rechecks_menu_availability_and_rolls_back_atomically_when_menu_unavailable_or_deleted`, serta menutup follow-up terkait pada `RFCS.md` (`[CLOSED in RFC-002 fix round]`).
+
+### Files Changed (Branch: `feat/rfc-002-cart-checkout-customer-orders`)
+
+#### Created
+- `app/Http/Middleware/EnsureUserIsAdmin.php`
+- `app/Policies/OrderPolicy.php`
+- `app/Http/Controllers/CartController.php`
+- `app/Http/Controllers/CheckoutController.php`
+- `app/Http/Controllers/CustomerOrderController.php`
+- `resources/views/cart/index.blade.php`
+- `resources/views/checkout/index.blade.php`
+- `resources/views/orders/index.blade.php`
+- `resources/views/orders/show.blade.php`
+- `resources/views/admin/dashboard.blade.php`
+- `tests/Feature/CartTest.php`
+- `tests/Feature/CheckoutTest.php`
+- `tests/Feature/CustomerOrderTest.php`
+- `tests/Feature/AdminAccessTest.php`
+
+#### Modified
+- `app/Models/Order.php`
+- `bootstrap/app.php`
+- `routes/web.php`
+- `resources/views/menus/index.blade.php`
+- `resources/views/layouts/navigation.blade.php`
+- `RFCS.md`
+- `RFCs/RFC-002-Cart-Checkout-Customer-Orders.md`

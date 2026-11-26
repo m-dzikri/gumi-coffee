@@ -30,7 +30,27 @@
 
     {{-- Menu Listing Grouped by Category (#fffaee) --}}
     <section class="w-full bg-[#fffaee] text-[#020202] py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-7xl mx-auto space-y-16">
+        <div class="max-w-7xl mx-auto space-y-12">
+            @if(session('status'))
+                <div role="status" class="p-4 bg-[#e9bfd2] border-2 border-[#020202] flex flex-wrap items-center justify-between gap-4">
+                    <span class="text-sm font-black uppercase tracking-wider text-[#020202]">
+                        {{ session('status') }}
+                    </span>
+                    <a href="{{ route('cart.index') }}" class="pop-btn-crimson py-2 px-5 text-xs">
+                        Lihat Keranjang
+                    </a>
+                </div>
+            @endif
+
+            @if($errors->any())
+                <div role="alert" class="p-4 bg-[#b22e3b] text-[#fffaee] border-2 border-[#020202] space-y-1">
+                    @foreach($errors->all() as $error)
+                        <p class="text-sm font-bold">{{ $error }}</p>
+                    @endforeach
+                </div>
+            @endif
+
+            <div class="space-y-16">
             @forelse($menusByCategory as $category => $menus)
                 <div id="kategori-{{ \Illuminate\Support\Str::slug($category) }}" class="scroll-mt-24">
                     <div class="flex flex-wrap items-baseline justify-between gap-4 pb-4 border-b-2 border-[#020202]">
@@ -99,13 +119,42 @@
                                         @endif
                                     </div>
 
-                                    <div class="mt-5 pt-4 border-t border-[#020202]/15 flex items-center justify-between">
-                                        <span class="text-lg font-black text-[#020202]">
-                                            Rp {{ number_format($menu->price, 0, ',', '.') }}
-                                        </span>
-                                        <span class="text-xs font-black uppercase tracking-wider {{ $menu->is_available ? 'text-[#b22e3b]' : 'text-[#020202]/60' }}">
-                                            {{ $menu->is_available ? 'Siap Dipesan' : 'Stok Habis' }}
-                                        </span>
+                                    <div class="mt-5 pt-4 border-t border-[#020202]/15 space-y-4">
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-lg font-black text-[#020202]">
+                                                Rp {{ number_format($menu->price, 0, ',', '.') }}
+                                            </span>
+                                            <span class="text-xs font-black uppercase tracking-wider {{ $menu->is_available ? 'text-[#b22e3b]' : 'text-[#020202]/60' }}">
+                                                {{ $menu->is_available ? 'Siap Dipesan' : 'Stok Habis' }}
+                                            </span>
+                                        </div>
+
+                                        @if($menu->is_available)
+                                            <form method="POST" action="{{ route('cart.store') }}" class="flex items-center gap-2">
+                                                @csrf
+                                                <input type="hidden" name="menu_id" value="{{ $menu->id }}" />
+                                                <label for="qty-menu-{{ $menu->id }}" class="sr-only">
+                                                    Kuantitas {{ $menu->name }}
+                                                </label>
+                                                <input id="qty-menu-{{ $menu->id }}"
+                                                       name="quantity"
+                                                       type="number"
+                                                       min="1"
+                                                       max="99"
+                                                       value="1"
+                                                       required
+                                                       class="w-20 min-h-[44px] px-3 py-2 bg-[#fffaee] text-[#020202] border-2 border-[#020202] font-black text-sm text-center focus:outline-none focus:ring-2 focus:ring-[#b22e3b]" />
+                                                <button type="submit" class="pop-btn-crimson flex-1 px-4 py-2.5 text-xs">
+                                                    + Keranjang
+                                                </button>
+                                            </form>
+                                        @else
+                                            <button type="button"
+                                                    disabled
+                                                    class="w-full min-h-[44px] px-4 py-2.5 bg-[#020202]/15 text-[#020202]/60 border-2 border-[#020202]/20 font-black uppercase tracking-wider text-xs">
+                                                Tidak Tersedia
+                                            </button>
+                                        @endif
                                     </div>
                                 </div>
                             </article>
@@ -122,6 +171,7 @@
                     </p>
                 </div>
             @endforelse
+            </div>
         </div>
     </section>
 </x-app-layout>

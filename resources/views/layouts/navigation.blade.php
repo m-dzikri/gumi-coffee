@@ -2,6 +2,7 @@
     $openHour = config('gumi.operating_hours.open', '08:00');
     $closeHour = config('gumi.operating_hours.close', '22:00');
     $location = config('gumi.location', 'Jl. Braga No. 42, Bandung');
+    $cartCount = collect(session('cart', []))->sum('quantity');
 @endphp
 <header x-data="{ mobileOpen: false }" class="w-full">
     {{-- 1. Top Announcement Strip (#e9bfd2) --}}
@@ -43,6 +44,25 @@
                        class="min-h-[44px] inline-flex items-center text-xs lg:text-sm font-black uppercase tracking-[0.14em] text-[#fffaee] hover:text-[#e9bfd2] transition-colors">
                         Cerita Kami
                     </a>
+                    <a href="{{ route('cart.index') }}"
+                       class="min-h-[44px] inline-flex items-center gap-2 text-xs lg:text-sm font-black uppercase tracking-[0.14em] transition-colors {{ request()->routeIs('cart.*') || request()->routeIs('checkout.*') ? 'text-[#e9bfd2] underline decoration-2 underline-offset-8' : 'text-[#fffaee] hover:text-[#e9bfd2]' }}">
+                        <span>Keranjang</span>
+                        <span class="px-2 py-0.5 bg-[#e9bfd2] text-[#020202] text-[11px] font-black">
+                            {{ $cartCount }}
+                        </span>
+                    </a>
+                    @auth
+                        <a href="{{ route('orders.index') }}"
+                           class="min-h-[44px] inline-flex items-center text-xs lg:text-sm font-black uppercase tracking-[0.14em] transition-colors {{ request()->routeIs('orders.*') ? 'text-[#e9bfd2] underline decoration-2 underline-offset-8' : 'text-[#fffaee] hover:text-[#e9bfd2]' }}">
+                            Pesanan Saya
+                        </a>
+                        @if(Auth::user()->isAdmin())
+                            <a href="{{ route('admin.dashboard') }}"
+                               class="min-h-[44px] inline-flex items-center text-xs lg:text-sm font-black uppercase tracking-[0.14em] transition-colors {{ request()->routeIs('admin.*') ? 'text-[#e9bfd2] underline decoration-2 underline-offset-8' : 'text-[#fffaee] hover:text-[#e9bfd2]' }}">
+                                Admin
+                            </a>
+                        @endif
+                    @endauth
 
                     <div class="h-5 w-px bg-[#fffaee]/30" aria-hidden="true"></div>
 
@@ -110,6 +130,23 @@
                class="block min-h-[44px] py-2.5 px-3 font-black uppercase tracking-wider text-sm text-[#fffaee] hover:bg-[#b22e3b]/40">
                 Cerita Kami
             </a>
+            <a href="{{ route('cart.index') }}"
+               class="flex items-center justify-between min-h-[44px] py-2.5 px-3 font-black uppercase tracking-wider text-sm {{ request()->routeIs('cart.*') || request()->routeIs('checkout.*') ? 'bg-[#b22e3b] text-[#fffaee]' : 'text-[#fffaee] hover:bg-[#b22e3b]/40' }}">
+                <span>Keranjang</span>
+                <span class="px-2 py-0.5 bg-[#e9bfd2] text-[#020202] text-xs font-black">{{ $cartCount }}</span>
+            </a>
+            @auth
+                <a href="{{ route('orders.index') }}"
+                   class="block min-h-[44px] py-2.5 px-3 font-black uppercase tracking-wider text-sm {{ request()->routeIs('orders.*') ? 'bg-[#b22e3b] text-[#fffaee]' : 'text-[#fffaee] hover:bg-[#b22e3b]/40' }}">
+                    Pesanan Saya
+                </a>
+                @if(Auth::user()->isAdmin())
+                    <a href="{{ route('admin.dashboard') }}"
+                       class="block min-h-[44px] py-2.5 px-3 font-black uppercase tracking-wider text-sm {{ request()->routeIs('admin.*') ? 'bg-[#b22e3b] text-[#fffaee]' : 'text-[#fffaee] hover:bg-[#b22e3b]/40' }}">
+                        Panel Admin
+                    </a>
+                @endif
+            @endauth
 
             <div class="pt-3 border-t border-[#fffaee]/20 space-y-2">
                 @auth
