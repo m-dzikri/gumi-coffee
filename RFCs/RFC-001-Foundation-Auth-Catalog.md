@@ -7,7 +7,7 @@
 
 ## 1. Summary
 
-RFC ini membangun fondasi aplikasi **Gumi Coffee**: inisialisasi Laravel dengan zona waktu `Asia/Jakarta` dan konfigurasi terpusat `config/gumi.php`, skema migrasi keempat tabel inti (`users`, `menus`, `orders`, `order_items`) beserta model Eloquent dan relasinya, `DatabaseSeeder` dengan akun demo dan menu contoh beraset gambar statis di `public/`, autentikasi Laravel Breeze (`customer` & `admin`) dengan fitur hapus akun yang dinonaktifkan sepenuhnya, tata letak dasar bergaya **Urban / Neo-Brutalist**, halaman Beranda (*Brand Profile* ringan), serta halaman Katalog Menu Publik.
+RFC ini membangun fondasi aplikasi **Gumi Coffee**: inisialisasi Laravel dengan zona waktu `Asia/Jakarta` dan konfigurasi terpusat `config/gumi.php`, skema migrasi keempat tabel inti (`users`, `menus`, `orders`, `order_items`) beserta model Eloquent dan relasinya, `DatabaseSeeder` dengan akun demo dan menu contoh beraset gambar statis di `public/`, autentikasi Laravel Breeze (`customer` & `admin`) dengan fitur hapus akun yang dinonaktifkan sepenuhnya, tata letak dasar bergaya **Playful Pop-Editorial / Retro Coffee Club** (`CR-001`), halaman Beranda (*Brand Profile* ringan), serta halaman Katalog Menu Publik.
 
 ---
 
@@ -87,16 +87,25 @@ Menyediakan data awal yang deterministik untuk pengujian dan demo portofolio:
 - **Akun Customer Demo**: `name = 'Pelanggan Gumi'`, `email = 'customer@gumicoffee.test'`, `password = 'password'`, `role = 'customer'`.
 - **Data Menu Contoh**: Minimal 6 menu yang tersebar di kategori `Coffee`, `Non-Coffee`, dan `Pastry` (termasuk minimal 5 menu dengan `is_available = true` dan minimal 1 menu dengan `is_available = false`), menggunakan aset gambar statis di `public/images/menus/` sehingga tampil tanpa bergantung pada *upload storage* lokal.
 
-### 2.5 Public Routes & UI Theme (Urban / Neo-Brutalist)
+### 2.5 Public Routes & UI Theme (Playful Pop-Editorial / Retro Coffee Club — `CR-001`)
 - **Routes**:
   - `GET /` (`home`): Menampilkan *Brand Profile* Gumi Coffee (cerita singkat brand, lokasi dari `config('gumi.location')`, jam operasional `'open' - 'close' WIB` dari `config('gumi.operating_hours')`), dan tombol CTA **"Lihat Menu"** yang mengarah ke `route('menus.index')` (`/menus`).
   - `GET /menus` (`menus.index`): Menampilkan seluruh daftar menu yang dikelompokkan berdasarkan kategori (`config('gumi.categories')`).
-- **Urban Visual Direction (`UI-1`, `UI-2`)**:
-  - Palet warna:
-    - Primary Red: `#b22e3b` (dengan teks `#fffaee`)
-    - Primary Cream Background: `#fffaee` (dengan teks `#020202`)
-    - Secondary Pink Accent: `#e9bfd2` (dengan teks `#020202`)
-    - Dark Neutral: `#020202` (untuk teks, border tegas `2px solid #020202`, dan *hard offset shadow* seperti `4px 4px 0px #020202`).
+- **Playful Pop-Editorial Visual Direction (`UI-1`, `UI-2`, `CR-001`)**:
+  - **Palet Warna Asli (Tetap Dipertahankan)**:
+    - Primary Crimson Red: `#b22e3b` (dengan teks `#fffaee`) — untuk *navbar* solid, *headline* utama *hero*, tombol CTA persegi solid, pita *ticker/marquee*, stiker *starburst*, dan *footer*.
+    - Primary Cream Background: `#fffaee` (dengan teks `#020202`) — untuk latar utama *hero*, pameran menu unggulan, pita *tagline* pra-footer, dan halaman katalog.
+    - Secondary Pink Accent: `#e9bfd2` (dengan teks `#020202`) — untuk pita pengumuman paling atas (*top announcement bar*), lingkaran latar datar (*flat circle backdrop*) pada *hero*, dan blok kanan pada seksi *50/50 split story*.
+    - Dark Contrast Neutral: `#020202` (dengan teks `#fffaee` atau `#e9bfd2`) — untuk tipografi utama di atas latar terang serta pita blok kontras gelap pada seksi pemilih kategori (*"What's Your Type?"*).
+  - **Komposisi Seksi Beranda (`GET /`) Mengikuti Referensi *Soletta Coffee Club***:
+    1. **Top Announcement Strip (`#e9bfd2`)**: Baris pengumuman *all-caps* singkat di bagian paling atas halaman.
+    2. **Solid Brand Navbar (`#b22e3b`)**: Identitas tipografi tebal **gumi COFFEE CLUB** di kiri dan navigasi *all-caps* di kanan menuju rute/anchor nyata (`/menus`, `#cerita-kami`, login/profil).
+    3. **Hero Section (`#fffaee`)**: *Headline* *display all-caps* ekstra tebal bertumpuk dengan baris aksen *italic* (misal `"GOOD COFFEE. ZERO SNOOZE."`), subjudul singkat, tombol CTA persegi solid `#b22e3b` (**"Lihat Menu"** -> `/menus`), serta visual produk di depan lingkaran datar `#e9bfd2` dengan stiker bintang (*starburst badge*) miring yang memuat info `config('gumi.estimated_pickup_text')`.
+    4. **Sunburst Ticker Strip (`#b22e3b`)**: Pita pembatas horizontal dengan frasa singkat huruf kapital yang dipisahkan ikon matahari/sinar (*sunburst*).
+    5. **Featured Menu Showcase — *"MEET YOUR MORNING PEOPLE."* (`#fffaee`)**: Menampilkan 3 menu unggulan dengan visual produk yang menonjol, judul *all-caps* tebal terpusat, karakter rasa dengan pemisah titik (`•`), dan harga Rupiah.
+    6. **Interactive Category Selector Banner — *"WHAT'S YOUR TYPE?"* (`#020202`)**: Judul bertumpuk di kiri dengan tombol persegi *outline* untuk setiap kategori (`config('gumi.categories')`: `Coffee`, `Non-Coffee`, `Pastry`) yang mengarah langsung ke anchor kategori terkait di `/menus` (mematuhi `UI-2`), dilengkapi ilustrasi cangkir kopi bermotif *rising sun* di kanan.
+    7. **50/50 Split Story & Info Operasional — *"LESS GUESS. MORE YES."* (`#e9bfd2`)**: Kolom visual seduh kopi di kiri dan blok editorial `#e9bfd2` di kanan yang memuat cerita singkat Gumi Coffee, lokasi kedai (`config('gumi.location')`), jam operasional (`config('gumi.operating_hours')`), serta CTA menuju `/menus`.
+    8. **Pre-Footer Sunburst Tagline (`#fffaee`) & Solid Footer (`#b22e3b`)**: Motif matahari terbit (*rising sun*) di kiri, garis vertikal, dan *tagline* *bold-italic all-caps* (`"SERIOUS ABOUT COFFEE. NOT OURSELVES."`) di atas *footer* solid `#b22e3b`.
   - Dokumen HTML memiliki `<html lang="id">`, `<title>` unik, landmark semantik (`header`, `nav`, `main`, `footer`), dan tepat satu `<h1>` per halaman.
 
 ---
@@ -136,7 +145,7 @@ Hal-hal berikut tidak mengikat perilaku antarmuka dan diserahkan kepada implemen
 - Teks narasi cerita singkat Gumi Coffee di beranda dan nama/deskripsi spesifik menu di dalam `DatabaseSeeder` (selama mencakup kategori `Coffee`, `Non-Coffee`, `Pastry`, menggunakan harga Rupiah bulat `>= 1000`, dan menyertakan contoh menu `is_available = true` serta `is_available = false`).
 - Format spasi pemisah simbol Rupiah pada tampilan harga menu (misal `'Rp ' . number_format($price, 0, ',', '.')` menjadi `Rp 25.000` atau `Rp25.000`).
 - Desain grafis SVG/PNG pada file gambar statis di `public/images/menus/` dan tampilan *fallback placeholder* saat `image_path` bernilai `null`.
-- Pemilihan jenis huruf (*font family*) pendamping gaya Urban / Neo-Brutalist, selama kontras warna dan keterbacaan memenuhi `UI-1`.
+- Pemilihan jenis huruf (*font family*) pendamping gaya Playful Pop-Editorial / Retro Coffee Club, selama kontras warna dan keterbacaan memenuhi `UI-1`.
 
 ---
 
@@ -151,4 +160,4 @@ Hal-hal berikut tidak mengikat perilaku antarmuka dan diserahkan kepada implemen
 7. **AC-7 (Registrasi Publik Menetapkan Role Customer)**: Pendaftaran akun baru melalui `POST /register` (bahkan jika request menyertakan input `role = 'admin'`) selalu membuat pengguna baru di database dengan `role = 'customer'` dan mengarahkan pengguna ke `/menus`.
 8. **AC-8 (Login, Logout & Pembaruan Profil Pelanggan)**: Pengguna terdaftar dapat melakukan login (`POST /login`, diarahkan secara default ke `/menus` jika tidak ada `url.intended`), logout (`POST /logout`), serta memperbarui nama, email (`PATCH /profile`), dan password (`PUT /password`) ketika sudah login.
 9. **AC-9 (Fitur Hapus Akun Dinonaktifkan)**: Halaman `GET /profile` tidak menampilkan form atau tombol hapus akun, dan permintaan `DELETE /profile` tidak menghapus data pengguna di tabel `users` (mengembalikan `404 Not Found` atau `405 Method Not Allowed`).
-10. **AC-10 (Tema Urban, Semantik HTML & Responsivitas)**: Halaman publik (`/` dan `/menus`) menerapkan palet warna `#b22e3b`, `#fffaee`, `#e9bfd2`, dan `#020202` sesuai aturan kontras `UI-1`, memiliki struktur landmark HTML semantik (`header`, `nav`, `main`, `footer`, satu `h1`), dan tidak mengalami *horizontal overflow* pada viewport `375px`, `768px`, dan `1280px`.
+10. **AC-10 (Tema Playful Pop-Editorial, Semantik HTML & Responsivitas)**: Halaman publik (`/` dan `/menus`) menerapkan tema Playful Pop-Editorial / Retro Coffee Club (`CR-001`) dengan palet warna `#b22e3b`, `#fffaee`, `#e9bfd2`, dan `#020202` sesuai aturan kontras `UI-1`, memiliki struktur landmark HTML semantik (`header`, `nav`, `main`, `footer`, satu `h1`), dan tidak mengalami *horizontal overflow* pada viewport `375px`, `768px`, dan `1280px`.

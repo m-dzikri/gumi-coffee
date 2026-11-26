@@ -94,7 +94,7 @@ Untuk menjalankan aplikasi di lingkungan *read-only filesystem* Vercel:
 
 ## 4. Implementer's Choices (Intentionally Flexible)
 
-- Tata letak navigasi panel Admin (apakah menggunakan topbar atau sidebar responsif) dan apakah tombol aksi transisi status diletakkan langsung di tabel daftar `/admin/orders`, di halaman detail `/admin/orders/{order}`, atau di keduanya, selama mengikuti tema Urban (`UI-1`) dan tidak menampilkan tombol mati (`UI-2`).
+- Tata letak navigasi panel Admin (apakah menggunakan topbar atau sidebar responsif) dan apakah tombol aksi transisi status diletakkan langsung di tabel daftar `/admin/orders`, di halaman detail `/admin/orders/{order}`, atau di keduanya, selama mengikuti tema Playful Pop-Editorial / Retro Coffee Club (`UI-1`) dan tidak menampilkan tombol mati (`UI-2`).
 - Target URL redirect setelah mutasi admin berhasil (`admin.menus.index`, `admin.orders.index`, `admin.orders.show`, atau `back()`).
 - Penanganan input checkbox `is_available` pada form Blade tambah/ubah menu (misal dengan hidden input `0` sebelum checkbox `1`, atau defaulting `true` saat field tidak dikirim pada `store` dan mempertahankan nilai lama saat tidak dikirim pada `update`).
 - Penggunaan `get()` atau `paginate()` pada tampilan tabel daftar `/admin/orders` dan `/admin/menus`.

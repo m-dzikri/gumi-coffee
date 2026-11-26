@@ -47,7 +47,7 @@ Setiap RFC diimplementasikan dengan menjalankan perintah **`/implement-rfc <id>`
 
 | Feature ID | Feature Name | Priority | Assigned RFC |
 |---|---|---|---|
-| **F1** | Halaman Beranda & Brand Profile Urban | Must | `RFC-001` |
+| **F1** | Halaman Beranda & Brand Profile Playful Pop-Editorial | Must | `RFC-001` |
 | **F2** | Katalog Menu Publik & Pengelompokan Kategori | Must | `RFC-001` |
 | **F3** | Autentikasi Laravel Breeze, Role Pengguna & Database Seeder | Must | `RFC-001` |
 | **F4** | User Profile Pelanggan Tanpa Fitur Hapus Akun | Must | `RFC-001` |

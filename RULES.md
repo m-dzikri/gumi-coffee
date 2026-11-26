@@ -20,7 +20,7 @@ Seluruh versi teknologi di bawah ini telah diverifikasi terhadap lingkungan loka
 | **Auth Scaffolding** | `laravel/breeze` | `v2.4.2` (`^2.4`) | Packagist Registry | Autentikasi sesi & profil berbasis Blade + Tailwind + Alpine |
 | **Testing Framework** | `phpunit/phpunit` | `13.4.8` (atau versi bawaan Laravel) | Packagist Registry | Eksekusi *Automated Feature Test* & *Unit Test* |
 | **Runtime Frontend Build** | `node` | `v24.20.0` | Local CLI (`node -v`) | Build aset CSS & JS |
-| **CSS Framework** | `tailwindcss` | `4.3.5` (atau `^3.4` / `^4.3` via Breeze) | npm Registry | Styling antarmuka **Urban / Neo-Brutalist** responsif |
+| **CSS Framework** | `tailwindcss` | `4.3.5` (atau `^3.4` / `^4.3` via Breeze) | npm Registry | Styling antarmuka **Playful Pop-Editorial / Retro Coffee Club** responsif |
 | **Frontend Interactivity** | `alpinejs` | `3.17.5` (`^3.17`) | npm Registry | Interaktivitas ringan di sisi klien (dropdown, modal, toggle) |
 | **Asset Bundler** | `vite` | `8.3.8` | npm Registry | Bundling aset statis frontend |
 | **Database** | SQLite (Lokal/Test) & PostgreSQL/MySQL (Produksi) | Native PDO | Laravel Database Driver | Penyimpanan relasional (`users`, `menus`, `orders`, `order_items`) |
@@ -62,7 +62,7 @@ Seluruh versi teknologi di bawah ini telah diverifikasi terhadap lingkungan loka
 
 ### 4. UI, Responsiveness & Accessibility (`UI`)
 
-- **UI-1**: Antarmuka wajib mengimplementasikan tema **Urban / Neo-Brutalist** menggunakan palet warna `#b22e3b` (utama), `#fffaee` (latar terang), `#e9bfd2` (aksen), dan `#020202` (teks, *border* tegas, dan *hard offset shadow*) dengan kombinasi warna teks yang memenuhi standar kontras WCAG AA (`#020202` di atas `#fffaee`/`#e9bfd2`, dan `#fffaee` di atas `#b22e3b`), serta bebas dari *horizontal overflow* pada lebar layar `375px` (Mobile), `768px` (Tablet), dan `1280px+` (Desktop). *(Memenuhi NFR-4).*
+- **UI-1**: Antarmuka wajib mengimplementasikan tema **Playful Pop-Editorial / Retro Coffee Club** (`CR-001`: komposisi *full-width color-blocked bands*, tipografi *display all-caps* tebal dengan aksen *italic*, motif grafis *sunburst* & *starburst badge*, serta tombol persegi solid/outline yang bersih) menggunakan palet warna asli `#b22e3b` (utama), `#fffaee` (latar terang), `#e9bfd2` (aksen), dan `#020202` (teks utama & blok kontras gelap) dengan kombinasi warna teks yang memenuhi standar kontras WCAG AA (`#020202` di atas `#fffaee`/`#e9bfd2`, dan `#fffaee` di atas `#b22e3b`/`#020202`), serta bebas dari *horizontal overflow* pada lebar layar `375px` (Mobile), `768px` (Tablet), dan `1280px+` (Desktop). *(Memenuhi NFR-4).*
 - **UI-2**: Setiap elemen interaktif pada Blade view wajib berfungsi penuh tanpa tautan atau tombol mati (dilarang menyisakan `href="#"` tanpa aksi, komentar `// TODO`, atau komponen placeholder tanpa fungsi), wajib menggunakan struktur HTML semantik (`header`, `nav`, `main`, `footer`, satu `h1` per halaman, serta `<label>` untuk setiap input form), dan tampilan pembayaran `qris_dummy` wajib memuat label teks **"SIMULASI"** secara jelas. *(Memenuhi NFR-4).*
 
 ### 5. Testing & Completeness Standards (`TEST`)
