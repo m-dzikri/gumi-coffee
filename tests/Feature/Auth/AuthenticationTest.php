@@ -17,7 +17,7 @@ class AuthenticationTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_users_can_authenticate_using_the_login_screen(): void
+    public function test_users_can_authenticate_using_the_login_screen_and_redirect_to_menus_by_default(): void
     {
         $user = User::factory()->create();
 
@@ -27,7 +27,16 @@ class AuthenticationTest extends TestCase
         ]);
 
         $this->assertAuthenticated();
-        $response->assertRedirect(route('dashboard', absolute: false));
+        $response->assertRedirect(route('menus.index', absolute: false));
+    }
+
+    public function test_dashboard_route_redirects_authenticated_users_to_menus(): void
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->get('/dashboard');
+
+        $response->assertRedirect(route('menus.index', absolute: false));
     }
 
     public function test_users_can_not_authenticate_with_invalid_password(): void

@@ -10,7 +10,7 @@ class ProfileTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_profile_page_is_displayed(): void
+    public function test_profile_page_is_displayed_and_does_not_contain_delete_account_section(): void
     {
         $user = User::factory()->create();
 
@@ -19,6 +19,9 @@ class ProfileTest extends TestCase
             ->get('/profile');
 
         $response->assertOk();
+        $response->assertDontSee('Delete Account');
+        $response->assertDontSee('Hapus Akun');
+        $response->assertDontSee('userDeletion');
     }
 
     public function test_profile_information_can_be_updated(): void
@@ -61,7 +64,7 @@ class ProfileTest extends TestCase
         $this->assertNotNull($user->refresh()->email_verified_at);
     }
 
-    public function test_user_can_delete_their_account(): void
+    public function test_delete_profile_endpoint_is_disabled_and_does_not_delete_user(): void
     {
         $user = User::factory()->create();
 
@@ -71,29 +74,7 @@ class ProfileTest extends TestCase
                 'password' => 'password',
             ]);
 
-        $response
-            ->assertSessionHasNoErrors()
-            ->assertRedirect('/');
-
-        $this->assertGuest();
-        $this->assertNull($user->fresh());
-    }
-
-    public function test_correct_password_must_be_provided_to_delete_account(): void
-    {
-        $user = User::factory()->create();
-
-        $response = $this
-            ->actingAs($user)
-            ->from('/profile')
-            ->delete('/profile', [
-                'password' => 'wrong-password',
-            ]);
-
-        $response
-            ->assertSessionHasErrorsIn('userDeletion', 'password')
-            ->assertRedirect('/profile');
-
+        $this->assertContains($response->getStatusCode(), [404, 405]);
         $this->assertNotNull($user->fresh());
     }
 }
