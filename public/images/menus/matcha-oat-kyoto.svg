@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+  <rect width="400" height="300" fill="#fffaee"/>
+  <rect x="16" y="16" width="368" height="268" fill="#fffaee" stroke="#020202" stroke-width="4"/>
+  <rect x="144" y="72" width="120" height="164" fill="#020202"/>
+  <rect x="136" y="64" width="120" height="164" fill="#e9bfd2" stroke="#020202" stroke-width="4"/>
+  <rect x="136" y="64" width="120" height="62" fill="#b22e3b" stroke="#020202" stroke-width="4"/>
+  <text x="196" y="172" font-family="monospace" font-weight="bold" font-size="15" text-anchor="middle" fill="#020202">MATCHA</text>
+</svg>

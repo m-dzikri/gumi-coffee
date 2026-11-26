@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+  <rect width="400" height="300" fill="#fffaee"/>
+  <rect x="16" y="16" width="368" height="268" fill="#e9bfd2" stroke="#020202" stroke-width="4"/>
+  <polygon points="108,186 204,96 300,186" fill="#020202"/>
+  <polygon points="100,178 196,88 292,178" fill="#fffaee" stroke="#020202" stroke-width="4"/>
+  <rect x="146" y="138" width="100" height="40" fill="#b22e3b" stroke="#020202" stroke-width="4"/>
+  <text x="196" y="164" font-family="monospace" font-weight="bold" font-size="14" text-anchor="middle" fill="#fffaee">PASTRY</text>
+</svg>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+  <rect width="400" height="300" fill="#fffaee"/>
+  <rect x="16" y="16" width="368" height="268" fill="#e9bfd2" stroke="#020202" stroke-width="4"/>
+  <rect x="144" y="68" width="120" height="170" fill="#020202"/>
+  <rect x="136" y="60" width="120" height="170" fill="#fffaee" stroke="#020202" stroke-width="4"/>
+  <rect x="136" y="150" width="120" height="80" fill="#b22e3b" stroke="#020202" stroke-width="4"/>
+  <rect x="126" y="48" width="140" height="16" fill="#020202"/>
+  <line x1="210" y1="24" x2="195" y2="48" stroke="#020202" stroke-width="6"/>
+  <text x="196" y="115" font-family="monospace" font-weight="bold" font-size="16" text-anchor="middle" fill="#020202">GUMI</text>
+</svg>
