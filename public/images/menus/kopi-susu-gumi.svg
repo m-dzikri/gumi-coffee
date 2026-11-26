@@ -1,10 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
-  <rect width="400" height="300" fill="#fffaee"/>
-  <rect x="16" y="16" width="368" height="268" fill="#e9bfd2" stroke="#020202" stroke-width="4"/>
-  <rect x="144" y="68" width="120" height="170" fill="#020202"/>
-  <rect x="136" y="60" width="120" height="170" fill="#fffaee" stroke="#020202" stroke-width="4"/>
-  <rect x="136" y="150" width="120" height="80" fill="#b22e3b" stroke="#020202" stroke-width="4"/>
-  <rect x="126" y="48" width="140" height="16" fill="#020202"/>
-  <line x1="210" y1="24" x2="195" y2="48" stroke="#020202" stroke-width="6"/>
-  <text x="196" y="115" font-family="monospace" font-weight="bold" font-size="16" text-anchor="middle" fill="#020202">GUMI</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 320" width="400" height="320">
+  <rect width="400" height="320" fill="#fffaee"/>
+  <circle cx="200" cy="165" r="115" fill="#e9bfd2"/>
+  <path d="M138 78 L262 78 L248 258 L152 258 Z" fill="#b22e3b"/>
+  <rect x="138" y="132" width="124" height="72" fill="#fffaee"/>
+  <path d="M168 175 A32 32 0 0 1 232 175 Z" fill="#b22e3b"/>
+  <line x1="200" y1="138" x2="200" y2="128" stroke="#b22e3b" stroke-width="3"/>
+  <line x1="176" y1="145" x2="169" y2="137" stroke="#b22e3b" stroke-width="3"/>
+  <line x1="224" y1="145" x2="231" y2="137" stroke="#b22e3b" stroke-width="3"/>
+  <rect x="130" y="64" width="140" height="16" fill="#020202"/>
+  <text x="200" y="194" font-family="sans-serif" font-weight="900" font-size="13" text-anchor="middle" fill="#020202" letter-spacing="2">GUMI SIGNATURE</text>
 </svg>
