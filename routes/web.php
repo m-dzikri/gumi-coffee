@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminMenuController;
+use App\Http\Controllers\Admin\AdminOrderController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CustomerOrderController;
@@ -43,10 +45,23 @@ Route::middleware('auth')->group(function () {
         ->name('orders.cancel');
 });
 
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', function () {
+        return redirect()->route('admin.orders.index');
+    })->name('dashboard');
+
+    Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
+    Route::patch('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.update-status');
+    Route::post('/orders/{order}/mark-paid', [AdminOrderController::class, 'markPaid'])->name('orders.mark-paid');
+
+    Route::get('/menus', [AdminMenuController::class, 'index'])->name('menus.index');
+    Route::get('/menus/create', [AdminMenuController::class, 'create'])->name('menus.create');
+    Route::post('/menus', [AdminMenuController::class, 'store'])->name('menus.store');
+    Route::get('/menus/{menu}/edit', [AdminMenuController::class, 'edit'])->name('menus.edit');
+    Route::put('/menus/{menu}', [AdminMenuController::class, 'update'])->name('menus.update');
+    Route::patch('/menus/{menu}/toggle-availability', [AdminMenuController::class, 'toggleAvailability'])->name('menus.toggle-availability');
+    Route::delete('/menus/{menu}', [AdminMenuController::class, 'destroy'])->name('menus.destroy');
 });
 
 require __DIR__.'/auth.php';

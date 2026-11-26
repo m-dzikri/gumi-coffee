@@ -57,9 +57,13 @@
                             Pesanan Saya
                         </a>
                         @if(Auth::user()->isAdmin())
-                            <a href="{{ route('admin.dashboard') }}"
-                               class="min-h-[44px] inline-flex items-center text-xs lg:text-sm font-black uppercase tracking-[0.14em] transition-colors {{ request()->routeIs('admin.*') ? 'text-[#e9bfd2] underline decoration-2 underline-offset-8' : 'text-[#fffaee] hover:text-[#e9bfd2]' }}">
-                                Admin
+                            <a href="{{ route('admin.orders.index') }}"
+                               class="min-h-[44px] inline-flex items-center text-xs lg:text-sm font-black uppercase tracking-[0.14em] transition-colors {{ request()->routeIs('admin.orders.*') ? 'text-[#e9bfd2] underline decoration-2 underline-offset-8' : 'text-[#fffaee] hover:text-[#e9bfd2]' }}">
+                                Pesanan Admin
+                            </a>
+                            <a href="{{ route('admin.menus.index') }}"
+                               class="min-h-[44px] inline-flex items-center text-xs lg:text-sm font-black uppercase tracking-[0.14em] transition-colors {{ request()->routeIs('admin.menus.*') ? 'text-[#e9bfd2] underline decoration-2 underline-offset-8' : 'text-[#fffaee] hover:text-[#e9bfd2]' }}">
+                                Kelola Menu
                             </a>
                         @endif
                     @endauth
@@ -141,9 +145,13 @@
                     Pesanan Saya
                 </a>
                 @if(Auth::user()->isAdmin())
-                    <a href="{{ route('admin.dashboard') }}"
-                       class="block min-h-[44px] py-2.5 px-3 font-black uppercase tracking-wider text-sm {{ request()->routeIs('admin.*') ? 'bg-[#b22e3b] text-[#fffaee]' : 'text-[#fffaee] hover:bg-[#b22e3b]/40' }}">
-                        Panel Admin
+                    <a href="{{ route('admin.orders.index') }}"
+                       class="block min-h-[44px] py-2.5 px-3 font-black uppercase tracking-wider text-sm {{ request()->routeIs('admin.orders.*') ? 'bg-[#b22e3b] text-[#fffaee]' : 'text-[#fffaee] hover:bg-[#b22e3b]/40' }}">
+                        Pesanan Admin
+                    </a>
+                    <a href="{{ route('admin.menus.index') }}"
+                       class="block min-h-[44px] py-2.5 px-3 font-black uppercase tracking-wider text-sm {{ request()->routeIs('admin.menus.*') ? 'bg-[#b22e3b] text-[#fffaee]' : 'text-[#fffaee] hover:bg-[#b22e3b]/40' }}">
+                        Kelola Menu
                     </a>
                 @endif
             @endauth

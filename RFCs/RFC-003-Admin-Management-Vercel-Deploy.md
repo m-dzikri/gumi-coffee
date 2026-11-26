@@ -113,3 +113,50 @@ Untuk menjalankan aplikasi di lingkungan *read-only filesystem* Vercel:
 7. **AC-7 (Quick-Toggle Ketersediaan Menu)**: Permintaan `PATCH /admin/menus/{menu}/toggle-availability` oleh Admin mengubah nilai boolean `is_available` menu dari `true` ke `false` (dan sebaliknya) serta langsung tercermin pada katalog menu publik.
 8. **AC-8 (Keamanan Riwayat Pesanan Saat Menu Dihapus Admin)**: Saat Admin menghapus menu melalui `DELETE /admin/menus/{menu}`, menu terhapus dari katalog, namun baris `order_items` pada pesanan yang pernah memesan menu tersebut tetap ada dengan `menu_id = null` serta nilai `menu_name`, `unit_price`, dan `subtotal` yang tetap utuh.
 9. **AC-9 (Konfigurasi Serverless Vercel)**: Proyek memiliki file `vercel.json` dan `api/index.php` yang mengarahkan `VIEW_COMPILED_PATH`, `APP_CONFIG_CACHE`, dan `APP_ROUTES_CACHE` ke `/tmp`, serta mengatur `LOG_CHANNEL=stderr` dan `SESSION_DRIVER=cookie`.
+
+---
+
+## Implementation Notes
+
+### Plan Approval & Deviations
+- **Rencana Implementasi**: Disetujui secara eksplisit oleh pengguna pada Phase 1 sebelum penulisan kode dimulai.
+- **Penyimpangan (Deviations)**: Tidak ada penyimpangan dari spesifikasi `RFC-003`.
+- **Keputusan Implementasi (Sesuai Section 4 Implementer's Choices)**:
+  - **Navigasi & Tata Letak Panel Admin**: Navbar utama (`resources/views/layouts/navigation.blade.php`) dan header halaman Admin menyediakan tautan langsung antara **Pesanan Masuk** (`/admin/orders`) dan **Kelola Katalog Menu** (`/admin/menus`). Tombol aksi pembayaran tunai (**"Tandai Lunas (Cash)"**) dan transisi status ditempatkan baik di kartu daftar `/admin/orders` maupun di halaman detail `/admin/orders/{order}`, dan hanya dirender untuk transisi yang valid menurut helper `Order::canMarkCashPaidByAdmin()` serta `Order::allowedAdminTargetStatuses()` (`ARCH-1`, `UI-2`).
+  - **Target Redirect Setelah Mutasi Admin**:
+    - `POST /admin/orders/{order}/mark-paid` dan `PATCH /admin/orders/{order}/status` menggunakan `redirect()->back(fallback: route('admin.orders.show', $order))` disertai flash `status`.
+    - `POST /admin/menus`, `PUT /admin/menus/{menu}`, `PATCH /admin/menus/{menu}/toggle-availability`, dan `DELETE /admin/menus/{menu}` mengarahkan ke `route('admin.menus.index')` disertai flash `status`.
+  - **Penanganan Checkbox `is_available`**: Form Blade menggunakan `<input type="hidden" name="is_available" value="0">` sebelum checkbox `value="1"`, sedangkan `AdminMenuController` memvalidasi `is_available` dengan `sometimes|boolean` (default `true` pada `store` jika field tidak dikirim, dan mempertahankan nilai lama `$menu->is_available` pada `update` jika field tidak dikirim).
+  - **Rute `GET /admin` (`admin.dashboard`)**: Mengarahkan langsung ke `route('admin.orders.index')` (`/admin/orders`) sesuai Section 2.1 `RFC-003`, dan file placeholder `resources/views/admin/dashboard.blade.php` dihapus.
+  - **Runtime Serverless Vercel**: `vercel.json` menggunakan `vercel-php@0.7.3` dengan pengalihan `APP_CONFIG_CACHE`, `APP_ROUTES_CACHE`, `APP_SERVICES_CACHE`, `APP_PACKAGES_CACHE`, dan `VIEW_COMPILED_PATH` ke `/tmp`, `LOG_CHANNEL=stderr`, dan `SESSION_DRIVER=cookie`; `api/index.php` membuat subdirektori `/tmp` sebelum memanggil `public/index.php`.
+- **Fix Round (`REVIEW-RFC-003.md`)**:
+  - Mengekstrak aturan validasi form menu pada `AdminMenuController::store()` dan `AdminMenuController::update()` ke satu metode helper privat `AdminMenuController::validateMenu(Request $request): array` di `app/Http/Controllers/Admin/AdminMenuController.php` untuk menghilangkan duplikasi aturan validasi, serta menutup follow-up terkait pada `RFCS.md` (`[CLOSED in RFC-003 fix round]`).
+
+### Files Changed (Branch: `feat/rfc-003-admin-management-vercel-deploy`)
+
+#### Created
+- `app/Http/Controllers/Admin/AdminOrderController.php`
+- `app/Http/Controllers/Admin/AdminMenuController.php`
+- `resources/views/admin/orders/index.blade.php`
+- `resources/views/admin/orders/show.blade.php`
+- `resources/views/admin/menus/index.blade.php`
+- `resources/views/admin/menus/create.blade.php`
+- `resources/views/admin/menus/edit.blade.php`
+- `api/index.php`
+- `vercel.json`
+- `tests/Feature/AdminOrderManagementTest.php`
+- `tests/Feature/AdminOrderStateMachineTest.php`
+- `tests/Feature/AdminMenuManagementTest.php`
+- `tests/Feature/VercelConfigTest.php`
+
+#### Modified
+- `app/Models/Order.php`
+- `routes/web.php`
+- `resources/views/layouts/navigation.blade.php`
+- `tests/Feature/AdminAccessTest.php`
+- `RFCS.md`
+- `RFCs/RFC-003-Admin-Management-Vercel-Deploy.md`
+
+#### Deleted
+- `resources/views/admin/dashboard.blade.php`
+
