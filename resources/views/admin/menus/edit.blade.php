@@ -1,11 +1,10 @@
 <x-app-layout>
     <x-slot name="title">Ubah Menu {{ $menu->name }} - Gumi Coffee Club</x-slot>
 
-    {{-- Edit Menu Header Band (#e9bfd2) --}}
     <section class="w-full bg-[#e9bfd2] text-[#020202] py-10 sm:py-14 px-4 sm:px-6 lg:px-8 border-b-2 border-[#020202]/15">
         <div class="max-w-4xl mx-auto flex flex-col sm:flex-row sm:items-end justify-between gap-6">
             <div>
-                <p class="text-xs font-black uppercase tracking-[0.22em] text-[#b22e3b]">
+                <p class="text-xs font-black uppercase tracking-[0.22em] text-[#020202]">
                     GUMI COFFEE CLUB • ADMIN CATALOG MANAGEMENT
                 </p>
                 <h1 class="mt-2 text-4xl sm:text-5xl font-black uppercase tracking-tight leading-[0.95] text-[#b22e3b]">
@@ -22,7 +21,6 @@
         </div>
     </section>
 
-    {{-- Edit Menu Form (#fffaee) --}}
     <section class="w-full bg-[#fffaee] text-[#020202] py-10 sm:py-14 px-4 sm:px-6 lg:px-8">
         <div class="max-w-4xl mx-auto">
             @if($errors->any())
@@ -33,7 +31,11 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('admin.menus.update', $menu) }}" class="bg-[#fffaee] border-2 border-[#020202] p-6 sm:p-8 space-y-6">
+            <form x-data="{ submitting: false }"
+                  @submit="submitting = true"
+                  method="POST"
+                  action="{{ route('admin.menus.update', $menu) }}"
+                  class="bg-[#fffaee] border-2 border-[#020202] p-6 sm:p-8 space-y-6">
                 @csrf
                 @method('PUT')
 
@@ -110,14 +112,18 @@
                            value="1"
                            @checked((bool) old('is_available', $menu->is_available))
                            class="w-5 h-5 accent-[#b22e3b] border-2 border-[#020202]" />
-                    <label for="menu-is-available" class="text-sm font-black uppercase tracking-wider text-[#020202]">
-                        Menu Tersedia untuk Dipesan (is_available)
+                    <label for="menu-is-available" class="min-h-[44px] inline-flex items-center text-sm font-black uppercase tracking-wider text-[#020202]">
+                        Menu Tersedia untuk Dipesan
                     </label>
                 </div>
 
                 <div class="flex flex-wrap items-center gap-4 pt-2">
-                    <button type="submit" class="pop-btn-crimson">
-                        Simpan Perubahan
+                    <button type="submit"
+                            :disabled="submitting"
+                            :aria-busy="submitting.toString()"
+                            class="pop-btn-crimson">
+                        <span x-show="!submitting">Simpan Perubahan</span>
+                        <span x-show="submitting" x-cloak>Menyimpan...</span>
                     </button>
                     <a href="{{ route('admin.menus.index') }}" class="pop-btn-outline-dark">
                         Batal

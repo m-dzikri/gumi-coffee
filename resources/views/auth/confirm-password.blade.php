@@ -1,27 +1,38 @@
 <x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('This is a secure area of the application. Please confirm your password before continuing.') }}
+    <x-slot name="title">Konfirmasi Kata Sandi - Gumi Coffee Club</x-slot>
+
+    <div class="mb-6">
+        <p class="text-xs font-black uppercase tracking-[0.2em] text-[#b22e3b]">
+            GUMI COFFEE CLUB
+        </p>
+        <h1 class="mt-1 text-3xl font-black uppercase tracking-tight text-[#020202]">
+            Konfirmasi Sandi
+        </h1>
+        <p class="mt-2 text-sm text-[#020202]/80">
+            Area ini memerlukan verifikasi keamanan. Masukkan kata sandi Anda sebelum melanjutkan.
+        </p>
     </div>
 
-    <form method="POST" action="{{ route('password.confirm') }}">
+    <form method="POST" action="{{ route('password.confirm') }}" class="space-y-5">
         @csrf
 
-        <!-- Password -->
         <div>
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-
+            <label for="password" class="block text-xs font-black uppercase tracking-wider text-[#020202] mb-1.5">
+                Kata Sandi
+            </label>
+            <input id="password"
+                   class="pop-input"
+                   type="password"
+                   name="password"
+                   required
+                   autocomplete="current-password" />
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
-        <div class="flex justify-end mt-4">
-            <x-primary-button>
-                {{ __('Confirm') }}
-            </x-primary-button>
+        <div class="pt-2">
+            <button type="submit" class="w-full pop-btn-crimson">
+                Konfirmasi
+            </button>
         </div>
     </form>
 </x-guest-layout>

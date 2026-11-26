@@ -1,11 +1,10 @@
 <x-app-layout>
     <x-slot name="title">Detail Pesanan {{ $order->order_code }} - Gumi Coffee Club</x-slot>
 
-    {{-- Order Detail Header Band (#e9bfd2) --}}
     <section class="w-full bg-[#e9bfd2] text-[#020202] py-10 sm:py-14 px-4 sm:px-6 lg:px-8 border-b-2 border-[#020202]/15">
         <div class="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-end justify-between gap-6">
             <div>
-                <p class="text-xs font-black uppercase tracking-[0.22em] text-[#b22e3b]">
+                <p class="text-xs font-black uppercase tracking-[0.22em] text-[#020202]">
                     GUMI COFFEE CLUB • TAKEAWAY ORDER DETAIL
                 </p>
                 <h1 class="mt-2 text-4xl sm:text-5xl font-black uppercase tracking-tight leading-[0.95] text-[#b22e3b]">
@@ -22,7 +21,6 @@
         </div>
     </section>
 
-    {{-- Order Detail Body (#fffaee) --}}
     <section class="w-full bg-[#fffaee] text-[#020202] py-10 sm:py-14 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto space-y-6">
             @if(session('status'))
@@ -40,9 +38,7 @@
             @endif
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                {{-- Left Column: Order Metadata & Item Snapshot Table --}}
                 <div class="lg:col-span-7 space-y-6">
-                    {{-- Order Status Summary Card --}}
                     <div class="bg-[#fffaee] border-2 border-[#020202] p-6 space-y-5">
                         <div class="flex flex-wrap items-center justify-between gap-4 border-b-2 border-[#020202]/15 pb-4">
                             <div>
@@ -109,7 +105,7 @@
 
                         @if($order->notes)
                             <div class="p-4 bg-[#e9bfd2] border-2 border-[#020202]">
-                                <p class="text-xs font-black uppercase tracking-wider text-[#b22e3b]">
+                                <p class="text-xs font-black uppercase tracking-wider text-[#020202]">
                                     Catatan Pesanan (Notes)
                                 </p>
                                 <p class="mt-1 text-sm font-bold text-[#020202]">
@@ -119,7 +115,6 @@
                         @endif
                     </div>
 
-                    {{-- Snapshot Order Items List --}}
                     <div class="bg-[#fffaee] border-2 border-[#020202] p-6 space-y-4">
                         <h2 class="text-xl font-black uppercase tracking-tight text-[#b22e3b]">
                             Rincian Item Pesanan
@@ -154,7 +149,6 @@
                     </div>
                 </div>
 
-                {{-- Right Column: QRIS Dummy Simulation & Customer Actions --}}
                 <aside class="lg:col-span-5 space-y-6">
                     @if($order->payment_method === 'qris_dummy')
                         <div class="bg-[#e9bfd2] border-2 border-[#020202] p-6 space-y-5">
@@ -176,7 +170,6 @@
                                 </p>
                             </div>
 
-                            {{-- Simulated QRIS Graphic Box --}}
                             <div class="bg-[#fffaee] border-2 border-[#020202] p-6 flex flex-col items-center justify-center text-center space-y-3">
                                 <span class="px-3 py-1 bg-[#020202] text-[#fffaee] text-[11px] font-black uppercase tracking-[0.22em]">
                                     QRIS SIMULASI GUMI COFFEE
@@ -184,14 +177,12 @@
 
                                 <svg class="w-48 h-48 text-[#020202]" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Gambar QRIS SIMULASI">
                                     <rect width="160" height="160" fill="#fffaee"/>
-                                    {{-- Finder Patterns --}}
                                     <rect x="12" y="12" width="40" height="40" stroke="#020202" stroke-width="6"/>
                                     <rect x="24" y="24" width="16" height="16" fill="#b22e3b"/>
                                     <rect x="108" y="12" width="40" height="40" stroke="#020202" stroke-width="6"/>
                                     <rect x="120" y="24" width="16" height="16" fill="#b22e3b"/>
                                     <rect x="12" y="108" width="40" height="40" stroke="#020202" stroke-width="6"/>
                                     <rect x="24" y="120" width="16" height="16" fill="#b22e3b"/>
-                                    {{-- Simulated Data Matrix Blocks --}}
                                     <rect x="64" y="16" width="12" height="12" fill="#020202"/>
                                     <rect x="84" y="16" width="12" height="12" fill="#020202"/>
                                     <rect x="64" y="36" width="24" height="12" fill="#020202"/>
@@ -204,7 +195,6 @@
                                     <rect x="116" y="116" width="32" height="12" fill="#020202"/>
                                     <rect x="64" y="132" width="28" height="16" fill="#020202"/>
                                     <rect x="104" y="136" width="44" height="12" fill="#b22e3b"/>
-                                    {{-- Center Simulation Banner --}}
                                     <rect x="28" y="66" width="104" height="28" fill="#b22e3b" stroke="#020202" stroke-width="3"/>
                                     <text x="80" y="84" text-anchor="middle" fill="#fffaee" font-size="13" font-weight="900" letter-spacing="2">SIMULASI</text>
                                 </svg>
@@ -215,10 +205,17 @@
                             </div>
 
                             @if($order->status === 'pending' && $order->payment_status === 'unpaid')
-                                <form method="POST" action="{{ route('orders.pay', $order) }}">
+                                <form x-data="{ submitting: false }"
+                                      @submit="submitting = true"
+                                      method="POST"
+                                      action="{{ route('orders.pay', $order) }}">
                                     @csrf
-                                    <button type="submit" class="pop-btn-crimson w-full text-center">
-                                        Saya sudah bayar
+                                    <button type="submit"
+                                            :disabled="submitting"
+                                            :aria-busy="submitting.toString()"
+                                            class="pop-btn-crimson w-full text-center">
+                                        <span x-show="!submitting">Saya sudah bayar</span>
+                                        <span x-show="submitting" x-cloak>Mengonfirmasi...</span>
                                     </button>
                                 </form>
                             @elseif($order->payment_status === 'paid')
@@ -241,7 +238,6 @@
                         </div>
                     @endif
 
-                    {{-- Customer Cancellation Box (Only when pending & unpaid) --}}
                     @if($order->status === 'pending' && $order->payment_status === 'unpaid')
                         <div class="bg-[#fffaee] border-2 border-[#020202] p-6 space-y-4">
                             <div>
@@ -253,11 +249,17 @@
                                 </p>
                             </div>
 
-                            <form method="POST" action="{{ route('orders.cancel', $order) }}">
+                            <form x-data="{ submitting: false }"
+                                  @submit="submitting = true"
+                                  method="POST"
+                                  action="{{ route('orders.cancel', $order) }}">
                                 @csrf
                                 <button type="submit"
+                                        :disabled="submitting"
+                                        :aria-busy="submitting.toString()"
                                         class="w-full min-h-[44px] px-6 py-3 bg-[#020202] text-[#fffaee] text-xs font-black uppercase tracking-wider hover:bg-[#b22e3b] transition-colors">
-                                    Batalkan Pesanan
+                                    <span x-show="!submitting">Batalkan Pesanan</span>
+                                    <span x-show="submitting" x-cloak>Membatalkan...</span>
                                 </button>
                             </form>
                         </div>

@@ -1,11 +1,10 @@
 <x-app-layout>
     <x-slot name="title">Riwayat Pesanan Saya - Gumi Coffee Club</x-slot>
 
-    {{-- Orders Header Band (#e9bfd2) --}}
     <section class="w-full bg-[#e9bfd2] text-[#020202] py-10 sm:py-14 px-4 sm:px-6 lg:px-8 border-b-2 border-[#020202]/15">
         <div class="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-end justify-between gap-6">
             <div>
-                <p class="text-xs font-black uppercase tracking-[0.22em] text-[#b22e3b]">
+                <p class="text-xs font-black uppercase tracking-[0.22em] text-[#020202]">
                     GUMI COFFEE CLUB • CUSTOMER ORDERS
                 </p>
                 <h1 class="mt-2 text-4xl sm:text-5xl font-black uppercase tracking-tight leading-[0.95] text-[#b22e3b]">
@@ -22,7 +21,6 @@
         </div>
     </section>
 
-    {{-- Orders List (#fffaee) --}}
     <section class="w-full bg-[#fffaee] text-[#020202] py-10 sm:py-14 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto space-y-6">
             @forelse($orders as $order)

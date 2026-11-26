@@ -46,8 +46,8 @@
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
-        <div class="flex items-center justify-between">
-            <label for="remember_me" class="inline-flex items-center gap-2">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+            <label for="remember_me" class="min-h-[44px] inline-flex items-center gap-2">
                 <input id="remember_me"
                        type="checkbox"
                        class="w-4 h-4 border-2 border-[#020202] text-[#b22e3b] focus:ring-[#b22e3b]"
@@ -56,7 +56,7 @@
             </label>
 
             @if (Route::has('password.request'))
-                <a class="text-xs font-bold underline text-[#b22e3b] hover:text-[#020202]" href="{{ route('password.request') }}">
+                <a class="min-h-[44px] inline-flex items-center text-xs font-bold underline text-[#b22e3b] hover:text-[#020202]" href="{{ route('password.request') }}">
                     Lupa kata sandi?
                 </a>
             @endif
@@ -70,7 +70,7 @@
 
         <p class="text-center text-xs font-bold text-[#020202] pt-2">
             Belum punya akun?
-            <a href="{{ route('register') }}" class="text-[#b22e3b] underline">Daftar sebagai pelanggan</a>
+            <a href="{{ route('register') }}" class="min-h-[44px] inline-flex items-center text-[#b22e3b] underline hover:text-[#020202]">Daftar sebagai pelanggan</a>
         </p>
     </form>
 </x-guest-layout>

@@ -1,11 +1,10 @@
 <x-app-layout>
     <x-slot name="title">Katalog Menu - Gumi Coffee Club</x-slot>
 
-    {{-- Catalog Editorial Header Band (#e9bfd2) --}}
     <section class="w-full bg-[#e9bfd2] text-[#020202] py-12 sm:py-16 px-4 sm:px-6 lg:px-8 border-b-2 border-[#020202]/15">
         <div class="max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-end justify-between gap-6">
             <div>
-                <p class="text-xs font-black uppercase tracking-[0.22em] text-[#b22e3b]">
+                <p class="text-xs font-black uppercase tracking-[0.22em] text-[#020202]">
                     GUMI COFFEE CLUB • TAKEAWAY CATALOG
                 </p>
                 <h1 class="mt-2 text-4xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight leading-[0.95] text-[#b22e3b]">
@@ -16,7 +15,6 @@
                 </p>
             </div>
 
-            {{-- Category Quick Filter Anchors --}}
             <div class="flex flex-wrap gap-2.5">
                 @foreach($categories as $category)
                     <a href="#kategori-{{ \Illuminate\Support\Str::slug($category) }}"
@@ -28,7 +26,6 @@
         </div>
     </section>
 
-    {{-- Menu Listing Grouped by Category (#fffaee) --}}
     <section class="w-full bg-[#fffaee] text-[#020202] py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto space-y-12">
             @if(session('status'))
@@ -65,7 +62,6 @@
                     <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                         @foreach($menus as $menu)
                             <article class="flex flex-col bg-[#fffaee] border-2 border-[#020202]/15 p-5 transition-colors hover:border-[#b22e3b]">
-                                {{-- Product Visual or Editorial Fallback Placeholder --}}
                                 <div class="relative w-full aspect-[4/3] bg-[#fffaee] flex items-center justify-center overflow-hidden">
                                     @if($menu->image_path)
                                         <img src="{{ asset($menu->image_path) }}"
@@ -89,7 +85,6 @@
                                         </div>
                                     @endif
 
-                                    {{-- Availability Status Badge --}}
                                     <div class="absolute top-2 right-2">
                                         @if($menu->is_available)
                                             <span class="inline-block px-3 py-1 bg-[#b22e3b] text-[#fffaee] text-[11px] font-black uppercase tracking-wider">
@@ -103,7 +98,6 @@
                                     </div>
                                 </div>
 
-                                {{-- Menu Copy & Rupiah Price --}}
                                 <div class="mt-5 flex-1 flex flex-col justify-between">
                                     <div>
                                         <p class="text-[11px] font-black uppercase tracking-[0.18em] text-[#b22e3b]">
@@ -130,7 +124,11 @@
                                         </div>
 
                                         @if($menu->is_available)
-                                            <form method="POST" action="{{ route('cart.store') }}" class="flex items-center gap-2">
+                                            <form x-data="{ submitting: false }"
+                                                  @submit="submitting = true"
+                                                  method="POST"
+                                                  action="{{ route('cart.store') }}"
+                                                  class="flex items-center gap-2">
                                                 @csrf
                                                 <input type="hidden" name="menu_id" value="{{ $menu->id }}" />
                                                 <label for="qty-menu-{{ $menu->id }}" class="sr-only">
@@ -144,8 +142,12 @@
                                                        value="1"
                                                        required
                                                        class="w-20 min-h-[44px] px-3 py-2 bg-[#fffaee] text-[#020202] border-2 border-[#020202] font-black text-sm text-center focus:outline-none focus:ring-2 focus:ring-[#b22e3b]" />
-                                                <button type="submit" class="pop-btn-crimson flex-1 px-4 py-2.5 text-xs">
-                                                    + Keranjang
+                                                <button type="submit"
+                                                        :disabled="submitting"
+                                                        :aria-busy="submitting.toString()"
+                                                        class="pop-btn-crimson flex-1 px-4 py-2.5 text-xs">
+                                                    <span x-show="!submitting">+ Keranjang</span>
+                                                    <span x-show="submitting" x-cloak>Menambahkan...</span>
                                                 </button>
                                             </form>
                                         @else
@@ -162,7 +164,7 @@
                     </div>
                 </div>
             @empty
-                <div class="py-12 px-6 bg-[#e9bfd2] text-center">
+                <div class="py-12 px-6 bg-[#e9bfd2] border-2 border-[#020202] text-center">
                     <h2 class="text-xl font-black uppercase text-[#020202]">
                         Belum Ada Menu Tersedia
                     </h2>

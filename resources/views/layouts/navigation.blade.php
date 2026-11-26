@@ -5,7 +5,6 @@
     $cartCount = collect(session('cart', []))->sum('quantity');
 @endphp
 <header x-data="{ mobileOpen: false }" class="w-full">
-    {{-- 1. Top Announcement Strip (#e9bfd2) --}}
     <div class="w-full bg-[#e9bfd2] text-[#020202] border-b border-[#020202]/15 px-4 py-2">
         <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-center text-[11px] sm:text-xs font-black uppercase tracking-[0.16em]">
             <span>FRESHLY BREWED TAKEAWAY</span>
@@ -16,36 +15,33 @@
         </div>
     </div>
 
-    {{-- 2. Solid Brand Navbar (#b22e3b) --}}
     <nav aria-label="Navigasi Utama" class="w-full bg-[#b22e3b] text-[#fffaee]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between min-h-[72px] py-3 gap-4">
-                {{-- Brand Logo: gumi COFFEE CLUB --}}
                 <a href="{{ route('home') }}" class="inline-flex items-baseline gap-2.5 group focus-visible:outline-[#fffaee]">
                     <span class="text-3xl sm:text-4xl font-black tracking-tighter lowercase leading-none text-[#fffaee]">
                         gumi
                     </span>
-                    <span class="text-[11px] sm:text-xs font-black uppercase tracking-[0.22em] text-[#e9bfd2] border-l-2 border-[#fffaee]/40 pl-2.5 leading-tight">
+                    <span class="text-[11px] sm:text-xs font-black uppercase tracking-[0.22em] text-[#fffaee] border-l-2 border-[#fffaee]/50 pl-2.5 leading-tight">
                         COFFEE<br class="sm:hidden"> CLUB
                     </span>
                 </a>
 
-                {{-- Desktop Navigation Links --}}
-                <div class="hidden md:flex items-center gap-6 lg:gap-8">
+                <div class="hidden md:flex items-center gap-5 lg:gap-7">
                     <a href="{{ route('home') }}"
-                       class="min-h-[44px] inline-flex items-center text-xs lg:text-sm font-black uppercase tracking-[0.14em] transition-colors {{ request()->routeIs('home') ? 'text-[#e9bfd2] underline decoration-2 underline-offset-8' : 'text-[#fffaee] hover:text-[#e9bfd2]' }}">
+                       class="min-h-[44px] inline-flex items-center text-xs lg:text-sm font-black uppercase tracking-[0.14em] text-[#fffaee] transition-colors {{ request()->routeIs('home') ? 'underline decoration-2 underline-offset-8' : 'hover:underline hover:decoration-2 hover:underline-offset-8' }}">
                         Beranda
                     </a>
                     <a href="{{ route('menus.index') }}"
-                       class="min-h-[44px] inline-flex items-center text-xs lg:text-sm font-black uppercase tracking-[0.14em] transition-colors {{ request()->routeIs('menus.*') ? 'text-[#e9bfd2] underline decoration-2 underline-offset-8' : 'text-[#fffaee] hover:text-[#e9bfd2]' }}">
+                       class="min-h-[44px] inline-flex items-center text-xs lg:text-sm font-black uppercase tracking-[0.14em] text-[#fffaee] transition-colors {{ request()->routeIs('menus.*') ? 'underline decoration-2 underline-offset-8' : 'hover:underline hover:decoration-2 hover:underline-offset-8' }}">
                         Lihat Menu
                     </a>
                     <a href="{{ route('home') }}#cerita-kami"
-                       class="min-h-[44px] inline-flex items-center text-xs lg:text-sm font-black uppercase tracking-[0.14em] text-[#fffaee] hover:text-[#e9bfd2] transition-colors">
+                       class="min-h-[44px] inline-flex items-center text-xs lg:text-sm font-black uppercase tracking-[0.14em] text-[#fffaee] hover:underline hover:decoration-2 hover:underline-offset-8 transition-colors">
                         Cerita Kami
                     </a>
                     <a href="{{ route('cart.index') }}"
-                       class="min-h-[44px] inline-flex items-center gap-2 text-xs lg:text-sm font-black uppercase tracking-[0.14em] transition-colors {{ request()->routeIs('cart.*') || request()->routeIs('checkout.*') ? 'text-[#e9bfd2] underline decoration-2 underline-offset-8' : 'text-[#fffaee] hover:text-[#e9bfd2]' }}">
+                       class="min-h-[44px] inline-flex items-center gap-2 text-xs lg:text-sm font-black uppercase tracking-[0.14em] text-[#fffaee] transition-colors {{ request()->routeIs('cart.*') || request()->routeIs('checkout.*') ? 'underline decoration-2 underline-offset-8' : 'hover:underline hover:decoration-2 hover:underline-offset-8' }}">
                         <span>Keranjang</span>
                         <span class="px-2 py-0.5 bg-[#e9bfd2] text-[#020202] text-[11px] font-black">
                             {{ $cartCount }}
@@ -53,22 +49,22 @@
                     </a>
                     @auth
                         <a href="{{ route('orders.index') }}"
-                           class="min-h-[44px] inline-flex items-center text-xs lg:text-sm font-black uppercase tracking-[0.14em] transition-colors {{ request()->routeIs('orders.*') ? 'text-[#e9bfd2] underline decoration-2 underline-offset-8' : 'text-[#fffaee] hover:text-[#e9bfd2]' }}">
+                           class="min-h-[44px] inline-flex items-center text-xs lg:text-sm font-black uppercase tracking-[0.14em] text-[#fffaee] transition-colors {{ request()->routeIs('orders.*') ? 'underline decoration-2 underline-offset-8' : 'hover:underline hover:decoration-2 hover:underline-offset-8' }}">
                             Pesanan Saya
                         </a>
                         @if(Auth::user()->isAdmin())
                             <a href="{{ route('admin.orders.index') }}"
-                               class="min-h-[44px] inline-flex items-center text-xs lg:text-sm font-black uppercase tracking-[0.14em] transition-colors {{ request()->routeIs('admin.orders.*') ? 'text-[#e9bfd2] underline decoration-2 underline-offset-8' : 'text-[#fffaee] hover:text-[#e9bfd2]' }}">
+                               class="min-h-[44px] inline-flex items-center text-xs lg:text-sm font-black uppercase tracking-[0.14em] text-[#fffaee] transition-colors {{ request()->routeIs('admin.orders.*') ? 'underline decoration-2 underline-offset-8' : 'hover:underline hover:decoration-2 hover:underline-offset-8' }}">
                                 Pesanan Admin
                             </a>
                             <a href="{{ route('admin.menus.index') }}"
-                               class="min-h-[44px] inline-flex items-center text-xs lg:text-sm font-black uppercase tracking-[0.14em] transition-colors {{ request()->routeIs('admin.menus.*') ? 'text-[#e9bfd2] underline decoration-2 underline-offset-8' : 'text-[#fffaee] hover:text-[#e9bfd2]' }}">
+                               class="min-h-[44px] inline-flex items-center text-xs lg:text-sm font-black uppercase tracking-[0.14em] text-[#fffaee] transition-colors {{ request()->routeIs('admin.menus.*') ? 'underline decoration-2 underline-offset-8' : 'hover:underline hover:decoration-2 hover:underline-offset-8' }}">
                                 Kelola Menu
                             </a>
                         @endif
                     @endauth
 
-                    <div class="h-5 w-px bg-[#fffaee]/30" aria-hidden="true"></div>
+                    <div class="h-5 w-px bg-[#fffaee]/40" aria-hidden="true"></div>
 
                     @auth
                         <div class="flex items-center gap-3">
@@ -101,7 +97,6 @@
                     @endauth
                 </div>
 
-                {{-- Mobile Menu Toggle Button --}}
                 <div class="flex md:hidden">
                     <button type="button"
                             @click="mobileOpen = !mobileOpen"
@@ -116,7 +111,6 @@
             </div>
         </div>
 
-        {{-- Mobile Collapsible Navigation --}}
         <div id="mobile-nav-menu"
              x-show="mobileOpen"
              x-cloak

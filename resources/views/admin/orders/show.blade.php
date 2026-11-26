@@ -9,11 +9,10 @@
 <x-app-layout>
     <x-slot name="title">Admin Detail Pesanan {{ $order->order_code }} - Gumi Coffee Club</x-slot>
 
-    {{-- Admin Order Detail Header Band (#e9bfd2) --}}
     <section class="w-full bg-[#e9bfd2] text-[#020202] py-10 sm:py-14 px-4 sm:px-6 lg:px-8 border-b-2 border-[#020202]/15">
         <div class="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-end justify-between gap-6">
             <div>
-                <p class="text-xs font-black uppercase tracking-[0.22em] text-[#b22e3b]">
+                <p class="text-xs font-black uppercase tracking-[0.22em] text-[#020202]">
                     GUMI COFFEE CLUB • ADMIN ORDER CONTROL
                 </p>
                 <h1 class="mt-2 text-4xl sm:text-5xl font-black uppercase tracking-tight leading-[0.95] text-[#b22e3b]">
@@ -35,7 +34,6 @@
         </div>
     </section>
 
-    {{-- Admin Order Detail Body (#fffaee) --}}
     <section class="w-full bg-[#fffaee] text-[#020202] py-10 sm:py-14 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto space-y-6">
             @if(session('status'))
@@ -53,7 +51,6 @@
             @endif
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                {{-- Left Column: Order Metadata & Snapshot Items --}}
                 <div class="lg:col-span-7 space-y-6">
                     <div class="bg-[#fffaee] border-2 border-[#020202] p-6 space-y-5">
                         <div class="flex flex-wrap items-center justify-between gap-4 border-b-2 border-[#020202]/15 pb-4">
@@ -124,7 +121,7 @@
 
                         @if($order->notes)
                             <div class="p-4 bg-[#e9bfd2] border-2 border-[#020202]">
-                                <p class="text-xs font-black uppercase tracking-wider text-[#b22e3b]">
+                                <p class="text-xs font-black uppercase tracking-wider text-[#020202]">
                                     Catatan Pesanan (Notes)
                                 </p>
                                 <p class="mt-1 text-sm font-bold text-[#020202]">
@@ -134,7 +131,6 @@
                         @endif
                     </div>
 
-                    {{-- Snapshot Order Items --}}
                     <div class="bg-[#fffaee] border-2 border-[#020202] p-6 space-y-4">
                         <h2 class="text-xl font-black uppercase tracking-tight text-[#b22e3b]">
                             Rincian Item Pesanan (Snapshot)
@@ -169,7 +165,6 @@
                     </div>
                 </div>
 
-                {{-- Right Column: Admin Payment & State Machine Controls --}}
                 <aside class="lg:col-span-5 space-y-6">
                     @if($order->canMarkCashPaidByAdmin())
                         <div class="bg-[#e9bfd2] border-2 border-[#020202] p-6 space-y-4">
@@ -185,10 +180,17 @@
                                 </p>
                             </div>
 
-                            <form method="POST" action="{{ route('admin.orders.mark-paid', $order) }}">
+                            <form x-data="{ submitting: false }"
+                                  @submit="submitting = true"
+                                  method="POST"
+                                  action="{{ route('admin.orders.mark-paid', $order) }}">
                                 @csrf
-                                <button type="submit" class="pop-btn-crimson w-full text-center">
-                                    Tandai Lunas (Cash)
+                                <button type="submit"
+                                        :disabled="submitting"
+                                        :aria-busy="submitting.toString()"
+                                        class="pop-btn-crimson w-full text-center">
+                                    <span x-show="!submitting">Tandai Lunas (Cash)</span>
+                                    <span x-show="submitting" x-cloak>Memproses...</span>
                                 </button>
                             </form>
                         </div>
@@ -211,13 +213,19 @@
                         @if(count($allowedTargets) > 0)
                             <div class="space-y-3">
                                 @foreach($allowedTargets as $targetStatus)
-                                    <form method="POST" action="{{ route('admin.orders.update-status', $order) }}">
+                                    <form x-data="{ submitting: false }"
+                                          @submit="submitting = true"
+                                          method="POST"
+                                          action="{{ route('admin.orders.update-status', $order) }}">
                                         @csrf
                                         @method('PATCH')
                                         <input type="hidden" name="status" value="{{ $targetStatus }}" />
                                         <button type="submit"
+                                                :disabled="submitting"
+                                                :aria-busy="submitting.toString()"
                                                 class="w-full {{ $targetStatus === 'cancelled' ? 'min-h-[44px] px-6 py-3 bg-[#020202] text-[#fffaee] text-xs font-black uppercase tracking-wider hover:bg-[#b22e3b] transition-colors' : 'pop-btn-crimson' }}">
-                                            {{ $actionButtonLabels[$targetStatus] ?? strtoupper($targetStatus) }}
+                                            <span x-show="!submitting">{{ $actionButtonLabels[$targetStatus] ?? strtoupper($targetStatus) }}</span>
+                                            <span x-show="submitting" x-cloak>Memproses...</span>
                                         </button>
                                     </form>
                                 @endforeach

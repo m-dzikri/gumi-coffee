@@ -79,7 +79,7 @@
 
         <p class="text-center text-xs font-bold text-[#020202] pt-2">
             Sudah terdaftar?
-            <a href="{{ route('login') }}" class="text-[#b22e3b] underline">Masuk di sini</a>
+            <a href="{{ route('login') }}" class="min-h-[44px] inline-flex items-center text-[#b22e3b] underline hover:text-[#020202]">Masuk di sini</a>
         </p>
     </form>
 </x-guest-layout>

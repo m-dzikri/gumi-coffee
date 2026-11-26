@@ -1,11 +1,10 @@
 <x-app-layout>
     <x-slot name="title">Manajemen Katalog Menu Admin - Gumi Coffee Club</x-slot>
 
-    {{-- Admin Menus Header Band (#e9bfd2) --}}
     <section class="w-full bg-[#e9bfd2] text-[#020202] py-10 sm:py-14 px-4 sm:px-6 lg:px-8 border-b-2 border-[#020202]/15">
         <div class="max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-end justify-between gap-6">
             <div>
-                <p class="text-xs font-black uppercase tracking-[0.22em] text-[#b22e3b]">
+                <p class="text-xs font-black uppercase tracking-[0.22em] text-[#020202]">
                     GUMI COFFEE CLUB • ADMIN CATALOG MANAGEMENT
                 </p>
                 <h1 class="mt-2 text-4xl sm:text-5xl font-black uppercase tracking-tight leading-[0.95] text-[#b22e3b]">
@@ -27,7 +26,6 @@
         </div>
     </section>
 
-    {{-- Admin Menus Listing (#fffaee) --}}
     <section class="w-full bg-[#fffaee] text-[#020202] py-10 sm:py-14 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto space-y-6">
             @if(session('status'))
@@ -84,13 +82,18 @@
                         </div>
 
                         <div class="pt-4 border-t-2 border-[#020202]/15 space-y-2.5">
-                            {{-- Quick-Toggle Availability Form --}}
-                            <form method="POST" action="{{ route('admin.menus.toggle-availability', $menu) }}">
+                            <form x-data="{ submitting: false }"
+                                  @submit="submitting = true"
+                                  method="POST"
+                                  action="{{ route('admin.menus.toggle-availability', $menu) }}">
                                 @csrf
                                 @method('PATCH')
                                 <button type="submit"
+                                        :disabled="submitting"
+                                        :aria-busy="submitting.toString()"
                                         class="w-full min-h-[44px] px-4 py-2 text-xs font-black uppercase tracking-wider border-2 border-[#020202] transition-colors {{ $menu->is_available ? 'bg-[#e9bfd2] text-[#020202] hover:bg-[#020202] hover:text-[#fffaee]' : 'bg-[#b22e3b] text-[#fffaee] hover:bg-[#020202]' }}">
-                                    {{ $menu->is_available ? 'Matikan Ketersediaan (Set Habis)' : 'Aktifkan Ketersediaan (Set Tersedia)' }}
+                                    <span x-show="!submitting">{{ $menu->is_available ? 'Matikan Ketersediaan (Set Habis)' : 'Aktifkan Ketersediaan (Set Tersedia)' }}</span>
+                                    <span x-show="submitting" x-cloak>Memperbarui...</span>
                                 </button>
                             </form>
 
@@ -100,12 +103,18 @@
                                     Ubah Menu
                                 </a>
 
-                                <form method="POST" action="{{ route('admin.menus.destroy', $menu) }}">
+                                <form x-data="{ submitting: false }"
+                                      @submit="submitting = true"
+                                      method="POST"
+                                      action="{{ route('admin.menus.destroy', $menu) }}">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"
+                                            :disabled="submitting"
+                                            :aria-busy="submitting.toString()"
                                             class="w-full min-h-[44px] px-3 py-2 bg-[#020202] text-[#fffaee] border-2 border-[#020202] text-xs font-black uppercase tracking-wider hover:bg-[#b22e3b] hover:border-[#b22e3b] transition-colors">
-                                        Hapus Menu
+                                        <span x-show="!submitting">Hapus Menu</span>
+                                        <span x-show="submitting" x-cloak>Menghapus...</span>
                                     </button>
                                 </form>
                             </div>

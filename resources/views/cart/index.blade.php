@@ -1,11 +1,10 @@
 <x-app-layout>
     <x-slot name="title">Keranjang Belanja - Gumi Coffee Club</x-slot>
 
-    {{-- Cart Header Band (#e9bfd2) --}}
     <section class="w-full bg-[#e9bfd2] text-[#020202] py-10 sm:py-14 px-4 sm:px-6 lg:px-8 border-b-2 border-[#020202]/15">
         <div class="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-end justify-between gap-6">
             <div>
-                <p class="text-xs font-black uppercase tracking-[0.22em] text-[#b22e3b]">
+                <p class="text-xs font-black uppercase tracking-[0.22em] text-[#020202]">
                     GUMI COFFEE CLUB • TAKEAWAY CART
                 </p>
                 <h1 class="mt-2 text-4xl sm:text-5xl font-black uppercase tracking-tight leading-[0.95] text-[#b22e3b]">
@@ -22,7 +21,6 @@
         </div>
     </section>
 
-    {{-- Cart Content (#fffaee) --}}
     <section class="w-full bg-[#fffaee] text-[#020202] py-10 sm:py-14 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto space-y-6">
             @if(session('status'))
@@ -33,7 +31,7 @@
 
             @if($errors->any())
                 <div role="alert" class="p-4 bg-[#b22e3b] text-[#fffaee] border-2 border-[#020202] space-y-1">
-                    <p class="text-xs font-black uppercase tracking-[0.18em] text-[#e9bfd2]">PERHATIAN</p>
+                    <p class="text-xs font-black uppercase tracking-[0.18em] text-[#fffaee]">PERHATIAN</p>
                     @foreach($errors->all() as $error)
                         <p class="text-sm font-bold">{{ $error }}</p>
                     @endforeach
@@ -42,7 +40,6 @@
 
             @if(count($cartItems) > 0)
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                    {{-- Left Column: Cart Items List --}}
                     <div class="lg:col-span-8 space-y-4">
                         @foreach($cartItems as $item)
                             <article class="bg-[#fffaee] border-2 border-[#020202] p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
@@ -73,7 +70,11 @@
 
                                 <div class="flex flex-wrap items-center gap-4 sm:justify-end">
                                     @if($item['is_available'])
-                                        <form method="POST" action="{{ route('cart.update', $item['menu_id']) }}" class="flex items-center gap-2">
+                                        <form x-data="{ submitting: false }"
+                                              @submit="submitting = true"
+                                              method="POST"
+                                              action="{{ route('cart.update', $item['menu_id']) }}"
+                                              class="flex items-center gap-2">
                                             @csrf
                                             @method('PATCH')
                                             <label for="cart-qty-{{ $item['menu_id'] }}" class="text-xs font-black uppercase tracking-wider text-[#020202]">
@@ -87,8 +88,12 @@
                                                    value="{{ $item['quantity'] }}"
                                                    required
                                                    class="w-20 min-h-[44px] px-3 py-2 bg-[#fffaee] text-[#020202] border-2 border-[#020202] font-black text-sm text-center focus:outline-none focus:ring-2 focus:ring-[#b22e3b]" />
-                                            <button type="submit" class="pop-btn-outline-dark px-4 py-2 text-xs">
-                                                Ubah
+                                            <button type="submit"
+                                                    :disabled="submitting"
+                                                    :aria-busy="submitting.toString()"
+                                                    class="pop-btn-outline-dark px-4 py-2 text-xs">
+                                                <span x-show="!submitting">Ubah</span>
+                                                <span x-show="submitting" x-cloak>...</span>
                                             </button>
                                         </form>
                                     @endif
@@ -102,12 +107,18 @@
                                         </span>
                                     </div>
 
-                                    <form method="POST" action="{{ route('cart.destroy', $item['menu_id']) }}">
+                                    <form x-data="{ submitting: false }"
+                                          @submit="submitting = true"
+                                          method="POST"
+                                          action="{{ route('cart.destroy', $item['menu_id']) }}">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit"
+                                                :disabled="submitting"
+                                                :aria-busy="submitting.toString()"
                                                 class="min-h-[44px] px-4 py-2 bg-[#020202] text-[#fffaee] text-xs font-black uppercase tracking-wider hover:bg-[#b22e3b] transition-colors">
-                                            Hapus
+                                            <span x-show="!submitting">Hapus</span>
+                                            <span x-show="submitting" x-cloak>Menghapus...</span>
                                         </button>
                                     </form>
                                 </div>
@@ -115,10 +126,9 @@
                         @endforeach
                     </div>
 
-                    {{-- Right Column: Order Summary Card --}}
                     <aside class="lg:col-span-4 bg-[#e9bfd2] border-2 border-[#020202] p-6 space-y-5">
                         <div>
-                            <p class="text-xs font-black uppercase tracking-[0.2em] text-[#b22e3b]">
+                            <p class="text-xs font-black uppercase tracking-[0.2em] text-[#020202]">
                                 RINGKASAN TAKEAWAY
                             </p>
                             <h2 class="mt-1 text-2xl font-black uppercase tracking-tight text-[#020202]">
@@ -129,7 +139,7 @@
                         <dl class="space-y-3 border-y-2 border-[#020202]/20 py-4 text-sm">
                             <div class="flex items-center justify-between">
                                 <dt class="font-bold text-[#020202]">Tipe Pesanan</dt>
-                                <dd class="font-black uppercase text-[#b22e3b]">Takeaway / Pick-up</dd>
+                                <dd class="font-black uppercase text-[#020202]">Takeaway / Pick-up</dd>
                             </div>
                             <div class="flex items-center justify-between">
                                 <dt class="font-bold text-[#020202]">Lokasi Kasir</dt>

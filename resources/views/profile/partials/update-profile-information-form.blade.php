@@ -53,13 +53,13 @@
                     <p class="text-xs font-bold text-[#020202]">
                         Alamat email Anda belum diverifikasi.
 
-                        <button form="send-verification" class="underline font-black text-[#b22e3b] hover:text-[#020202]">
+                        <button form="send-verification" class="min-h-[44px] inline-flex items-center underline font-black text-[#020202] hover:bg-[#020202] hover:text-[#fffaee] px-2">
                             Klik di sini untuk mengirim ulang tautan verifikasi.
                         </button>
                     </p>
 
                     @if (session('status') === 'verification-link-sent')
-                        <p class="mt-2 font-black text-xs text-[#b22e3b]">
+                        <p class="mt-2 font-black text-xs text-[#020202]">
                             Tautan verifikasi baru telah dikirim ke alamat email Anda.
                         </p>
                     @endif

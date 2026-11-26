@@ -2,15 +2,7 @@
 
 declare(strict_types=1);
 
-/*
-|--------------------------------------------------------------------------
-| Vercel Serverless PHP Entrypoint (Gumi Coffee)
-|--------------------------------------------------------------------------
-|
-| Ensures writable runtime directories exist under /tmp on Vercel's
-| read-only filesystem before forwarding execution to public/index.php.
-|
-*/
+// Pre-create writable /tmp runtime directories required on Vercel's read-only filesystem.
 
 $tmpDirectories = [
     '/tmp/views',
