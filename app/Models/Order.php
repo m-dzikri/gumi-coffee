@@ -117,22 +117,55 @@ class Order extends Model
         });
     }
 
+    public function canMarkCashPaidByAdmin(): bool
+    {
+        return $this->payment_method === self::METHOD_CASH
+            && $this->payment_status === self::PAYMENT_UNPAID
+            && in_array($this->status, [
+                self::STATUS_PENDING,
+                self::STATUS_PREPARING,
+                self::STATUS_READY,
+            ], true);
+    }
+
+    public function canTransitionToByAdmin(string $targetStatus): bool
+    {
+        return match ($targetStatus) {
+            self::STATUS_PREPARING => $this->status === self::STATUS_PENDING
+                && ($this->payment_method === self::METHOD_CASH || $this->payment_status === self::PAYMENT_PAID),
+            self::STATUS_READY => $this->status === self::STATUS_PREPARING,
+            self::STATUS_COMPLETED => $this->status === self::STATUS_READY
+                && $this->payment_status === self::PAYMENT_PAID,
+            self::STATUS_CANCELLED => $this->payment_status === self::PAYMENT_UNPAID
+                && in_array($this->status, [self::STATUS_PENDING, self::STATUS_PREPARING, self::STATUS_READY], true),
+            default => false,
+        };
+    }
+
+    /**
+     * @return list<string>
+     */
+    public function allowedAdminTargetStatuses(): array
+    {
+        $targets = [
+            self::STATUS_PREPARING,
+            self::STATUS_READY,
+            self::STATUS_COMPLETED,
+            self::STATUS_CANCELLED,
+        ];
+
+        return array_values(array_filter(
+            $targets,
+            fn (string $target): bool => $this->canTransitionToByAdmin($target)
+        ));
+    }
+
     public function markCashPaidByAdmin(): self
     {
         return DB::transaction(function (): self {
             $locked = self::whereKey($this->id)->lockForUpdate()->firstOrFail();
 
-            $allowedStatuses = [
-                self::STATUS_PENDING,
-                self::STATUS_PREPARING,
-                self::STATUS_READY,
-            ];
-
-            if (
-                $locked->payment_method !== self::METHOD_CASH
-                || $locked->payment_status !== self::PAYMENT_UNPAID
-                || ! in_array($locked->status, $allowedStatuses, true)
-            ) {
+            if (! $locked->canMarkCashPaidByAdmin()) {
                 throw ValidationException::withMessages([
                     'payment_status' => 'Penandaan lunas tunai hanya berlaku untuk pesanan cash yang belum dibayar pada status pending, preparing, atau ready.',
                 ]);
@@ -153,18 +186,7 @@ class Order extends Model
         return DB::transaction(function () use ($targetStatus): self {
             $locked = self::whereKey($this->id)->lockForUpdate()->firstOrFail();
 
-            $isAllowed = match ($targetStatus) {
-                self::STATUS_PREPARING => $locked->status === self::STATUS_PENDING
-                    && ($locked->payment_method === self::METHOD_CASH || $locked->payment_status === self::PAYMENT_PAID),
-                self::STATUS_READY => $locked->status === self::STATUS_PREPARING,
-                self::STATUS_COMPLETED => $locked->status === self::STATUS_READY
-                    && $locked->payment_status === self::PAYMENT_PAID,
-                self::STATUS_CANCELLED => $locked->payment_status === self::PAYMENT_UNPAID
-                    && in_array($locked->status, [self::STATUS_PENDING, self::STATUS_PREPARING, self::STATUS_READY], true),
-                default => false,
-            };
-
-            if (! $isAllowed) {
+            if (! $locked->canTransitionToByAdmin($targetStatus)) {
                 throw ValidationException::withMessages([
                     'status' => "Transisi status pesanan dari '{$locked->status}' ke '{$targetStatus}' dengan status pembayaran '{$locked->payment_status}' tidak diizinkan.",
                 ]);

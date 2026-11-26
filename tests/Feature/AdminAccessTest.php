@@ -25,14 +25,18 @@ class AdminAccessTest extends TestCase
             ->get('/admin')
             ->assertForbidden();
 
-        // 3. Admin accessing GET /admin is allowed (200 OK)
+        // 3. Admin accessing GET /admin is allowed and redirected to /admin/orders (200 OK)
         $admin = User::factory()->create([
             'role' => 'admin',
         ]);
 
         $this->actingAs($admin)
             ->get('/admin')
+            ->assertRedirect(route('admin.orders.index'));
+
+        $this->actingAs($admin)
+            ->get(route('admin.orders.index'))
             ->assertOk()
-            ->assertSeeText('PANEL');
+            ->assertSeeText('MANAJEMEN');
     }
 }
