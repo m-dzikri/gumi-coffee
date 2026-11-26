@@ -198,6 +198,8 @@ Hal-hal berikut tidak mengikat perilaku antarmuka dan diserahkan kepada implemen
   - `resources/views/home.blade.php` *(Created)*
   - `resources/views/menus/index.blade.php` *(Created)*
   - `resources/views/auth/login.blade.php`, `resources/views/auth/register.blade.php`, `resources/views/profile/edit.blade.php` *(Modified)*
+  - `resources/views/profile/partials/update-profile-information-form.blade.php`, `resources/views/profile/partials/update-password-form.blade.php` *(Modified — diselaraskan ke tema Playful Pop-Editorial & label bahasa Indonesia sesuai tindak lanjut `REVIEW-RFC-001.md`)*
+  - `resources/views/components/text-input.blade.php`, `resources/views/components/primary-button.blade.php`, `resources/views/components/input-label.blade.php` *(Modified — diselaraskan dengan kelas `.pop-input` dan `.pop-btn-crimson`)*
   - `resources/views/profile/partials/delete-user-form.blade.php` *(Deleted)*
   - `tests/Feature/FoundationAndCatalogTest.php` *(Created)*
   - `tests/Feature/DatabaseIntegrityTest.php` *(Created)*

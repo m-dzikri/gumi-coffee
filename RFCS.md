@@ -12,7 +12,7 @@ Setiap RFC diimplementasikan dengan menjalankan perintah **`/implement-rfc <id>`
 
 | RFC ID | Title | File | Features | Complexity | Status | Cold Read |
 |---|---|---|---|---|---|---|
-| **RFC-001** | Project Foundation, Authentication, Schema & Public Catalog | `RFCs/RFC-001-Foundation-Auth-Catalog.md` | `F1`, `F2`, `F3`, `F4` | Low | Implemented | Passed (`cold-reads/RFC-001-round-2.md`) |
+| **RFC-001** | Project Foundation, Authentication, Schema & Public Catalog | `RFCs/RFC-001-Foundation-Auth-Catalog.md` | `F1`, `F2`, `F3`, `F4` | Low | Reviewed | Passed (`cold-reads/RFC-001-round-2.md`) |
 | **RFC-002** | Session Cart, Takeaway Checkout, Order State Machine & Customer Orders | `RFCs/RFC-002-Cart-Checkout-Customer-Orders.md` | `F5`, `F6`, `F7`, `F8`, `F9` | Medium | Not started | Passed (`cold-reads/RFC-002-round-2.md`) |
 | **RFC-003** | Admin Order & Menu Management and Vercel Serverless Configuration | `RFCs/RFC-003-Admin-Management-Vercel-Deploy.md` | `F10`, `F11`, `F12`, `F13` | Medium | Not started | Passed (`cold-reads/RFC-003-round-1.md`) |
 
@@ -78,3 +78,10 @@ Setiap RFC diimplementasikan dengan menjalankan perintah **`/implement-rfc <id>`
 ## Open conflicts
 
 Tidak ditemukan konflik antar-artefak (`PRD.md`, `PRD-REVIEW.md`, `FEATURES.md`, `RULES.md`) maupun pertanyaan terbuka berstatus *High impact* yang menghalangi implementasi RFC.
+
+---
+
+## Follow-ups
+
+- **[CLOSED in RFC-001 fix round] RFC-001**: Selaraskan kelas styling dan teks label pada partial `resources/views/profile/partials/update-profile-information-form.blade.php` serta `resources/views/profile/partials/update-password-form.blade.php` agar menggunakan `.pop-input`, `.pop-btn-crimson`, palet warna Playful Pop-Editorial (`#020202`, `#fffaee`, `#b22e3b`), dan bahasa Indonesia seperti pada halaman `login` dan `register`.
+- **[CLOSED in RFC-001 fix round] RFC-001**: Perketat assertion `test_ac1` dan `test_ac2` pada `tests/Feature/FoundationAndCatalogTest.php` agar memverifikasi teks spesifik di dalam `<main>` `resources/views/home.blade.php` (seperti `'Cerita singkat Gumi Coffee'`) sehingga regresi pada body beranda tidak tertutup oleh teks yang sama pada navbar/footer layout.

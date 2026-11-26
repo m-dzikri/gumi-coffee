@@ -19,6 +19,11 @@ class ProfileTest extends TestCase
             ->get('/profile');
 
         $response->assertOk();
+        $response->assertSeeText('Informasi Profil');
+        $response->assertSeeText('Ubah Kata Sandi');
+        $response->assertSee('pop-input', false);
+        $response->assertSee('pop-btn-crimson', false);
+        $response->assertDontSee('focus:ring-indigo-500', false);
         $response->assertDontSee('Delete Account');
         $response->assertDontSee('Hapus Akun');
         $response->assertDontSee('userDeletion');

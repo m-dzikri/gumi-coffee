@@ -24,19 +24,37 @@ class FoundationAndCatalogTest extends TestCase
         $response->assertOk();
         $response->assertSeeText('09:00');
         $response->assertSeeText('21:30');
+
+        $html = (string) $response->getContent();
+        $this->assertMatchesRegularExpression('/<main\b[^>]*>(.*?)<\/main>/s', $html);
+        preg_match('/<main\b[^>]*>(.*?)<\/main>/s', $html, $matches);
+        $mainContent = $matches[1] ?? '';
+
+        $this->assertStringContainsString('JAM OPERASIONAL HARIAN', $mainContent);
+        $this->assertStringContainsString('09:00 - 21:30 WIB', $mainContent);
     }
 
     public function test_ac2_homepage_displays_brand_story_location_and_lihat_menu_cta_to_menus(): void
     {
-        config(['gumi.location' => 'Jl. Braga No. 42, Bandung']);
+        config(['gumi.location' => 'Jl. Braga No. 99, Bandung']);
 
         $response = $this->get('/');
 
         $response->assertOk();
-        $response->assertSeeText('Gumi Coffee');
-        $response->assertSeeText('Jl. Braga No. 42, Bandung');
+        $response->assertSeeText('Cerita singkat Gumi Coffee');
+        $response->assertSeeText('Jl. Braga No. 99, Bandung');
         $response->assertSeeText('Lihat Menu');
         $response->assertSee('href="'.route('menus.index').'"', false);
+
+        $html = (string) $response->getContent();
+        $this->assertMatchesRegularExpression('/<main\b[^>]*>(.*?)<\/main>/s', $html);
+        preg_match('/<main\b[^>]*>(.*?)<\/main>/s', $html, $matches);
+        $mainContent = $matches[1] ?? '';
+
+        $this->assertStringContainsString('Cerita singkat Gumi Coffee', $mainContent);
+        $this->assertStringContainsString('Jl. Braga No. 99, Bandung', $mainContent);
+        $this->assertStringContainsString('Lihat Menu', $mainContent);
+        $this->assertStringContainsString('href="'.route('menus.index').'"', $mainContent);
     }
 
     public function test_ac5_public_catalog_is_accessible_by_guest_and_renders_categories_rupiah_prices_and_image_fallback(): void
