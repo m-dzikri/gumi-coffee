@@ -12,7 +12,7 @@ Setiap RFC diimplementasikan dengan menjalankan perintah **`/implement-rfc <id>`
 
 | RFC ID | Title | File | Features | Complexity | Status | Cold Read |
 |---|---|---|---|---|---|---|
-| **RFC-001** | Project Foundation, Authentication, Schema & Public Catalog | `RFCs/RFC-001-Foundation-Auth-Catalog.md` | `F1`, `F2`, `F3`, `F4` | Low | In progress | Passed (`cold-reads/RFC-001-round-2.md`) |
+| **RFC-001** | Project Foundation, Authentication, Schema & Public Catalog | `RFCs/RFC-001-Foundation-Auth-Catalog.md` | `F1`, `F2`, `F3`, `F4` | Low | Implemented | Passed (`cold-reads/RFC-001-round-2.md`) |
 | **RFC-002** | Session Cart, Takeaway Checkout, Order State Machine & Customer Orders | `RFCs/RFC-002-Cart-Checkout-Customer-Orders.md` | `F5`, `F6`, `F7`, `F8`, `F9` | Medium | Not started | Passed (`cold-reads/RFC-002-round-2.md`) |
 | **RFC-003** | Admin Order & Menu Management and Vercel Serverless Configuration | `RFCs/RFC-003-Admin-Management-Vercel-Deploy.md` | `F10`, `F11`, `F12`, `F13` | Medium | Not started | Passed (`cold-reads/RFC-003-round-1.md`) |
 

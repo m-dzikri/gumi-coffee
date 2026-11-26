@@ -161,3 +161,45 @@ Hal-hal berikut tidak mengikat perilaku antarmuka dan diserahkan kepada implemen
 8. **AC-8 (Login, Logout & Pembaruan Profil Pelanggan)**: Pengguna terdaftar dapat melakukan login (`POST /login`, diarahkan secara default ke `/menus` jika tidak ada `url.intended`), logout (`POST /logout`), serta memperbarui nama, email (`PATCH /profile`), dan password (`PUT /password`) ketika sudah login.
 9. **AC-9 (Fitur Hapus Akun Dinonaktifkan)**: Halaman `GET /profile` tidak menampilkan form atau tombol hapus akun, dan permintaan `DELETE /profile` tidak menghapus data pengguna di tabel `users` (mengembalikan `404 Not Found` atau `405 Method Not Allowed`).
 10. **AC-10 (Tema Playful Pop-Editorial, Semantik HTML & Responsivitas)**: Halaman publik (`/` dan `/menus`) menerapkan tema Playful Pop-Editorial / Retro Coffee Club (`CR-001`) dengan palet warna `#b22e3b`, `#fffaee`, `#e9bfd2`, dan `#020202` sesuai aturan kontras `UI-1`, memiliki struktur landmark HTML semantik (`header`, `nav`, `main`, `footer`, satu `h1`), dan tidak mengalami *horizontal overflow* pada viewport `375px`, `768px`, dan `1280px`.
+
+---
+
+## Implementation Notes
+
+- **Plan Approval**: Rencana implementasi Phase 1 telah dipresentasikan dan disetujui secara eksplisit oleh pengguna sebelum Phase 2 dijalankan.
+- **Branch**: `feat/rfc-001-foundation-auth-catalog` (belum di-push ke GitHub sesuai instruksi pengguna).
+- **Deviations from RFC / Plan**:
+  - Tidak ada penyimpangan perilaku, skema, maupun antarmuka dari spesifikasi `RFC-001` dan `CR-001`.
+- **Architectural & Design Decisions (`CR-001` & `R-31`)**:
+  - **Palet Warna (`#b22e3b`, `#fffaee`, `#e9bfd2`, `#020202`)**: Mempertahankan 100% palet warna brand Gumi Coffee dengan rasio kontras WCAG AA (`#fffaee` di atas `#b22e3b`/`#020202`, dan `#020202` di atas `#fffaee`/`#e9bfd2`).
+  - **Tata Letak Playful Pop-Editorial / Retro Coffee Club (`CR-001`)**: Menerapkan komposisi 8 pita blok warna horizontal penuh (*Top Announcement Strip* `#e9bfd2`, *Solid Brand Navbar* `#b22e3b`, *Hero Section* `#fffaee` dengan lingkaran datar `#e9bfd2` & stiker *starburst* `#b22e3b`, *Sunburst Ticker Strip* `#b22e3b`, *Featured Menu Showcase* `"MEET YOUR MORNING PEOPLE."`, *Interactive Category Banner* `"WHAT'S YOUR TYPE?"` `#020202` yang terhubung langsung ke anchor kategori nyata di `/menus`, *50/50 Split Story* `"LESS GUESS. MORE YES."` `#e9bfd2`, serta *Pre-Footer Sunburst Tagline* `"SERIOUS ABOUT COFFEE. NOT OURSELVES."` & *Solid Footer* `#b22e3b`).
+- **Files Created or Modified**:
+  - `config/app.php` *(Modified — `'timezone' => 'Asia/Jakarta'`)*
+  - `config/gumi.php` *(Created — `operating_hours`, `estimated_pickup_text`, `categories`, `location`)*
+  - `database/migrations/0001_01_01_000000_create_users_table.php` *(Modified — kolom `role` default `'customer'`)*
+  - `database/migrations/0001_01_01_000003_create_menus_table.php` *(Created)*
+  - `database/migrations/0001_01_01_000004_create_orders_table.php` *(Created — `user_id` dengan `restrictOnDelete()`, `order_code` `string(20)->nullable()->unique()`, tanpa `order_type`/`table_id`)*
+  - `database/migrations/0001_01_01_000005_create_order_items_table.php` *(Created — `menu_id` `nullable` dengan `nullOnDelete()`, snapshot `menu_name`, `unit_price`, `quantity`, `subtotal`)*
+  - `app/Models/User.php` *(Modified — `$fillable`, `isAdmin()`, `orders()`)*
+  - `app/Models/Menu.php` *(Created)*
+  - `app/Models/Order.php` *(Created)*
+  - `app/Models/OrderItem.php` *(Created)*
+  - `database/factories/UserFactory.php` *(Modified — default `'role' => 'customer'`)*
+  - `database/seeders/DatabaseSeeder.php` *(Modified — akun demo Admin & Customer + 7 menu contoh)*
+  - `public/images/menus/kopi-susu-gumi.svg`, `americano-braga.svg`, `salted-caramel-latte.svg`, `cold-brew-citrus.svg`, `matcha-oat-kyoto.svg`, `dark-chocolate-valrhona.svg`, `butter-croissant-panggang.svg` *(Created)*
+  - `app/Http/Controllers/HomeController.php` *(Created)*
+  - `app/Http/Controllers/MenuController.php` *(Created)*
+  - `app/Http/Controllers/Auth/RegisteredUserController.php` *(Modified — eksplisit `'role' => 'customer'` & redirect ke `menus.index`)*
+  - `app/Http/Controllers/Auth/AuthenticatedSessionController.php` *(Modified — redirect default `intended` ke `menus.index`)*
+  - `app/Http/Controllers/ProfileController.php` *(Modified — hapus metode `destroy`)*
+  - `routes/web.php` *(Modified — rute `/`, `/menus`, redirect `/dashboard` -> `/menus`, hapus `DELETE /profile`)*
+  - `resources/css/app.css` *(Modified — komponen dan aturan dasar Playful Pop-Editorial)*
+  - `resources/views/layouts/app.blade.php`, `resources/views/layouts/guest.blade.php`, `resources/views/layouts/navigation.blade.php` *(Modified)*
+  - `resources/views/home.blade.php` *(Created)*
+  - `resources/views/menus/index.blade.php` *(Created)*
+  - `resources/views/auth/login.blade.php`, `resources/views/auth/register.blade.php`, `resources/views/profile/edit.blade.php` *(Modified)*
+  - `resources/views/profile/partials/delete-user-form.blade.php` *(Deleted)*
+  - `tests/Feature/FoundationAndCatalogTest.php` *(Created)*
+  - `tests/Feature/DatabaseIntegrityTest.php` *(Created)*
+  - `tests/Feature/DatabaseSeederTest.php` *(Created)*
+  - `tests/Feature/Auth/AuthenticationTest.php`, `tests/Feature/Auth/RegistrationTest.php`, `tests/Feature/ProfileTest.php`, `tests/Feature/ExampleTest.php` *(Modified)*
